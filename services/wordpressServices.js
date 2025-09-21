@@ -32,6 +32,20 @@ const fetchAllDogs = async () => {
   }
 };
 
+const saveSponsor = async (name, email) => {
+  const sqlQuery = `
+    INSERT INTO wp_custom_sponsors (name, email, created_at, updated_at)
+    VALUES (?,?,NOW(),NOW())
+  `;
+  try {
+    await config.db.query(sqlQuery, [name, email]);
+  } catch (error) {
+    console.error("Error al guardar la suscripción:", error);
+    throw new Error("Error en la capa de servicio al guardar la suscripción.");
+  }
+};
+
 module.exports = {
   fetchAllDogs,
+  saveSponsor,
 };

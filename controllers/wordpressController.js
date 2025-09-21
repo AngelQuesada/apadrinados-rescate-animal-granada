@@ -30,6 +30,24 @@ const getDogs = async (req, res) => {
   }
 };
 
-const wordpressControllers = { getDogs };
+const saveSponsor = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+    await wordpressService.saveSponsor(name, email);
+    res.status(200).json({
+      ok: true,
+      message: "Suscriptor guardado con éxito.",
+    });
+  } catch (error) {
+    console.error("Error en el controlador al guardar el suscriptor:", error);
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor al guardar el suscriptor.",
+      errorCode: "SPONSOR_SAVE_ERROR",
+    });
+  }
+};
+
+const wordpressControllers = { getDogs, saveSponsor };
 
 module.exports = wordpressControllers;
