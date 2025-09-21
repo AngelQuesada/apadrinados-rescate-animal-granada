@@ -7,6 +7,7 @@ exports.up = function (knex) {
 
     table.date("start_date").notNullable();
     table.date("end_date").nullable();
+    table.string("source", 50);
     table.boolean("is_active").notNullable().defaultTo(true);
 
     table.timestamps(true, true);
