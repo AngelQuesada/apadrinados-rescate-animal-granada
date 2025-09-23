@@ -48,6 +48,36 @@ const saveSponsor = async (req, res) => {
   }
 };
 
-const wordpressControllers = { getDogs, saveSponsor };
+const saveDogSponsor = async (req, res) => {
+  try {
+    const { dog_id, sponsor_id, start_date, end_date, source, is_active } =
+      req.body;
+    await wordpressService.saveDogSponsor(
+      dog_id,
+      sponsor_id,
+      start_date,
+      end_date,
+      source,
+      is_active
+    );
+    res.status(200).json({
+      ok: true,
+      message: "Relación padrino-perro guardada con éxito.",
+    });
+  } catch (error) {
+    console.error(
+      "Error en el controlador al guardar la relación padrino-perro:",
+      error
+    );
+    res.status(500).json({
+      ok: false,
+      message:
+        "Error interno del servidor al guardar la relación padrino-perro.",
+      errorCode: "DOG_SPONSOR_SAVE_ERROR",
+    });
+  }
+};
+
+const wordpressControllers = { getDogs, saveSponsor, saveDogSponsor };
 
 module.exports = wordpressControllers;

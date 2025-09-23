@@ -45,7 +45,37 @@ const saveSponsor = async (name, email) => {
   }
 };
 
+const saveDogSponsor = async (
+  dog_id,
+  sponsor_id,
+  start_date,
+  end_date,
+  source,
+  is_active
+) => {
+  const sqlQuery = `
+    INSERT INTO wp_custom_dog_sponsors (dog_id, sponsor_id, start_date, end_date, source, is_active, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
+  `;
+  try {
+    await config.db.query(sqlQuery, [
+      dog_id,
+      sponsor_id,
+      start_date,
+      end_date,
+      source,
+      is_active,
+    ]);
+  } catch (error) {
+    console.error("Error al guardar la relación padrino-perro:", error);
+    throw new Error(
+      "Error en la capa de servicio al guardar la relación padrino-perro."
+    );
+  }
+};
+
 module.exports = {
   fetchAllDogs,
   saveSponsor,
+  saveDogSponsor,
 };
