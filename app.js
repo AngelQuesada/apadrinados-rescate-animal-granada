@@ -1,10 +1,10 @@
-const express = require("express");
-const app = express();
-const config = require("./config");
+import express from "express";
+import config from "./config/index.js";
+// Routers
+import wordpressRoutes from "./routes/wordpressRoutes.js";
+import paypalRoutes from "./routes/paypalRoutes.js";
 
-// Routes-----
-const wordpressRoutes = require("./routes/wordpressRoutes");
-const paypalRoutes = require("./routes/paypalRoutes");
+const app = express();
 
 app.use(express.json());
 

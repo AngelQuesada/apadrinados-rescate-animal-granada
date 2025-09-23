@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const paypalController = require("../controllers/paypalController");
+import paypalController from "../controllers/paypalController.js";
 
 router.get(
   "/get-subcriptions-plans/",
@@ -15,4 +15,4 @@ router.get(
   paypalController.getSubscribersFromAllSubscriptionsPlans
 );
 
-module.exports = router;
+export default router;

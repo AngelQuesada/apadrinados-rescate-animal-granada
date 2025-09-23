@@ -1,4 +1,4 @@
-const wordpressService = require("../services/wordpressServices");
+import wordpressService from "../services/wordpressServices.js";
 
 const getDogs = async (req, res) => {
   try {
@@ -78,6 +78,6 @@ const saveDogSponsor = async (req, res) => {
   }
 };
 
-const wordpressControllers = { getDogs, saveSponsor, saveDogSponsor };
+const wordpressController = { getDogs, saveSponsor, saveDogSponsor };
 
-module.exports = wordpressControllers;
+export default wordpressController;

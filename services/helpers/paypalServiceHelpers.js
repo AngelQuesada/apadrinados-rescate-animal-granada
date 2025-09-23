@@ -1,4 +1,4 @@
-const createSubscribersDataStructure = (subscriptions) => {
+export const createSubscribersDataStructure = (subscriptions) => {
   const subscribers = [];
 
   for (const subscription of subscriptions) {
@@ -23,8 +23,4 @@ const createSubscribersDataStructure = (subscriptions) => {
     }
   }
   return subscribers;
-};
-
-module.exports = {
-  createSubscribersDataStructure,
 };

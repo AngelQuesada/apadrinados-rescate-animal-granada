@@ -1,4 +1,4 @@
-const getPaypalInstance = require("../services/paypalServices");
+import getPaypalInstance from "../services/paypalServices.js";
 
 const getAllSubscriptionsPlans = async (req, res) => {
   try {
@@ -74,7 +74,7 @@ const getSubscriptionPlanDetails = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   getAllSubscriptionsPlansIds,
   getAllSubscriptionsPlans,
   getSubscriptionPlanDetails,

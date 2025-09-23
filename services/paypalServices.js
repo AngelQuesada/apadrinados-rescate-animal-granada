@@ -1,7 +1,5 @@
-const config = require("../config");
-const {
-  createSubscribersDataStructure,
-} = require("../services/helpers/paypalServiceHelpers");
+import config from "../config/index.js";
+import { createSubscribersDataStructure } from "./helpers/paypalServiceHelpers.js";
 
 class PayPalService {
   #baseUrl;
@@ -227,4 +225,4 @@ async function getPaypalInstance() {
   return instance;
 }
 
-module.exports = getPaypalInstance;
+export default getPaypalInstance;

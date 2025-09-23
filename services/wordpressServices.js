@@ -1,4 +1,4 @@
-const config = require("../config");
+import config from "../config/index.js";
 
 const fetchAllDogs = async () => {
   const sqlQuery = `
@@ -53,6 +53,10 @@ const saveDogSponsor = async (
   source,
   is_active
 ) => {
+  // Source = {
+  //   0: custom;
+  //   1: paypal;
+  // }
   const sqlQuery = `
     INSERT INTO wp_custom_dog_sponsors (dog_id, sponsor_id, start_date, end_date, source, is_active, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
@@ -74,7 +78,7 @@ const saveDogSponsor = async (
   }
 };
 
-module.exports = {
+export default {
   fetchAllDogs,
   saveSponsor,
   saveDogSponsor,

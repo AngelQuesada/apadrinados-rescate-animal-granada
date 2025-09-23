@@ -1,9 +1,10 @@
-const express = require("express");
+import express from "express";
+import wordpressController from "../controllers/wordpressController.js";
+
 const router = express.Router();
-const wordpressController = require("../controllers/wordpressController");
 
 router.get("/get-dogs", wordpressController.getDogs);
 router.post("/save-sponsor", wordpressController.saveSponsor);
 router.post("/save-dog-sponsor", wordpressController.saveDogSponsor);
 
-module.exports = router;
+export default router;
