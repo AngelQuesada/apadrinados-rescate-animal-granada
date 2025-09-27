@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import mysql from "mysql2/promise";
 
-const pool = mysql.createPool({
+const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -11,6 +11,16 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-});
+};
 
-export default pool;
+export async function getDbConnection() {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    return connection;
+  } catch (error) {
+    console.error("Error al conectar con la base de datos:", error);
+    throw error;
+  }
+}
+
+export const pool = mysql.createPool(dbConfig);

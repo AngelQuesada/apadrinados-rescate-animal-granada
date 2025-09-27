@@ -1,9 +1,9 @@
 import "dotenv/config";
-import db from "../db/db.js";
+import { pool } from "../db/db.js";
 
 const config = {
   port: process.env.PORT,
-  db,
+  db: pool,
   paypal: {
     client_id: process.env.PAYPAL_CLIENT_ID,
     client_secret: process.env.PAYPAL_CLIENT_SECRET,

@@ -1,0 +1,33 @@
+{
+  "sponsors": [
+    { "id":1,
+      "email": "jose.maria@example.com",
+      "name": "Jose Maria"
+    },
+    {
+      "id":2,
+      "email": "juan.jose@example.com",
+      "name": "Juan Jose"
+    },
+    {
+      "id":3,
+      "email": "ana.perez@example.com",
+      "name": "Ana Perez"
+    },
+    {
+      "id":4,
+      "email": "carlos.gomez@example.com",
+      "name": "Carlos Gomez"
+    },
+    {
+      "id":5,
+      "email": "marta.rodriguez@example.com",
+      "name": "Marta Rodriguez"
+    },
+    {
+      "id":6,
+      "email": "luis.martinez@example.com",
+      "name": "Luis Martinez"
+    }
+  ]
+}

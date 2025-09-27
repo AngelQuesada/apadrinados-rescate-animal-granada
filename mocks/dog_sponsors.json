@@ -1,0 +1,202 @@
+{
+  "dog_sponsors": [
+    {
+      "id": 1,
+      "dog_id": 1419,
+      "sponsor_id": 1,
+      "start_date": "2024-01-01",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 2,
+      "dog_id": 1419,
+      "sponsor_id": 2,
+      "start_date": "2024-01-01",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 3,
+      "dog_id": 1476,
+      "sponsor_id": 3,
+      "start_date": "2024-01-01",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 4,
+      "dog_id": 1455,
+      "sponsor_id": 3,
+      "start_date": "2024-01-01",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 5,
+      "dog_id": 1420,
+      "sponsor_id": 4,
+      "start_date": "2024-01-05",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 6,
+      "dog_id": 1419,
+      "sponsor_id": 5,
+      "start_date": "2024-01-06",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 7,
+      "dog_id": 1476,
+      "sponsor_id": 6,
+      "start_date": "2024-01-07",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 8,
+      "dog_id": 1455,
+      "sponsor_id": 1,
+      "start_date": "2024-01-08",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 9,
+      "dog_id": 1420,
+      "sponsor_id": 2,
+      "start_date": "2024-01-09",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 10,
+      "dog_id": 1419,
+      "sponsor_id": 3,
+      "start_date": "2024-01-10",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 11,
+      "dog_id": 1476,
+      "sponsor_id": 4,
+      "start_date": "2024-01-11",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 12,
+      "dog_id": 1455,
+      "sponsor_id": 5,
+      "start_date": "2024-01-12",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 13,
+      "dog_id": 1420,
+      "sponsor_id": 6,
+      "start_date": "2024-01-13",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 14,
+      "dog_id": 1419,
+      "sponsor_id": 1,
+      "start_date": "2024-01-14",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 15,
+      "dog_id": 1476,
+      "sponsor_id": 2,
+      "start_date": "2024-01-15",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 16,
+      "dog_id": 1455,
+      "sponsor_id": 3,
+      "start_date": "2024-01-16",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 17,
+      "dog_id": 1420,
+      "sponsor_id": 4,
+      "start_date": "2024-01-17",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 18,
+      "dog_id": 1419,
+      "sponsor_id": 5,
+      "start_date": "2024-01-18",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 19,
+      "dog_id": 1476,
+      "sponsor_id": 6,
+      "start_date": "2024-01-19",
+      "end_date": null,
+      "source": 0,
+      "is_active": true
+    },
+    {
+      "id": 20,
+      "dog_id": 1455,
+      "sponsor_id": 1,
+      "start_date": "2024-01-20",
+      "end_date": null,
+      "source": 1,
+      "is_active": true
+    },
+    {
+      "id": 21,
+      "dog_id": 1419,
+      "sponsor_id": 2,
+      "start_date": "2023-12-15",
+      "end_date": "2023-12-31",
+      "source": 0,
+      "is_active": false
+    },
+    {
+      "id": 22,
+      "dog_id": 1420,
+      "sponsor_id": 3,
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-10",
+      "source": 1,
+      "is_active": false
+    }
+  ]
+}
