@@ -8,7 +8,10 @@
     "#routes/*":"./routes/*",
     "#services/*":"./services/*",
     "#servicesHelpers/*":"./services/helpers/*",
-    "#db/*":"./db/*"
+    "#db/*":"./db/*",
+    "#utils/*":"./utils/*",
+    "#controllers/*":"./controllers/*",
+    "#middlewares/*":"./middlewares/*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

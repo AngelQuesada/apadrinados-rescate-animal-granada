@@ -1,6 +1,6 @@
 import wordpressService from "../services/wordpressServices.js";
 
-const getDogs = async (req, res) => {
+const getDogs = async (req, res, next) => {
   try {
     const rawResults = await wordpressService.fetchAllDogs();
 
@@ -21,12 +21,7 @@ const getDogs = async (req, res) => {
       dogs: dogs_list,
     });
   } catch (error) {
-    console.error("Error en el controlador al obtener los perros:", error);
-    res.status(500).json({
-      ok: false,
-      message: "Error interno del servidor al obtener la lista de perros.",
-      errorCode: "DOGS_FETCH_ERROR",
-    });
+    next(error);
   }
 };
 
