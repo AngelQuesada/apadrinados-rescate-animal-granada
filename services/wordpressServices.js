@@ -25,9 +25,34 @@ const fetchAllDogs = async () => {
     return rows;
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);
-    // Lanzamos el error para que el controlador pueda capturarlo.
     throw new Error(
       "Error en la capa de servicio al obtener los datos de los perros."
+    );
+  }
+};
+
+const fetchSponsorsByDogsIds = async (dogs_ids) => {
+  const query = `SELECT
+        ds.dog_id,
+        ds.sponsor_id,
+        ds.id AS dog_sponsor_id,
+        s.name,
+        s.email,
+        ds.is_active,
+        ds.created_at
+      FROM wp_custom_dog_sponsors ds
+      JOIN wp_custom_sponsors s ON ds.sponsor_id = s.id
+      WHERE ds.dog_id IN (?);`;
+  try {
+    const [rows] = await config.db.query(query, [dogs_ids]);
+    return rows;
+  } catch (error) {
+    console.error(
+      "Error al obtener los sponsors por perros en el service:",
+      error
+    );
+    throw new Error(
+      "Error en la capa de servicio al obtener los sponsors por perros."
     );
   }
 };
@@ -82,4 +107,5 @@ export default {
   fetchAllDogs,
   saveSponsor,
   saveDogSponsor,
+  fetchSponsorsByDogsIds,
 };

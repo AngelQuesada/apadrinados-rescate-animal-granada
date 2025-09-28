@@ -30,6 +30,41 @@ const getDogs = async (req, res) => {
   }
 };
 
+const getSponsorsByDogsIds = async (req, res) => {
+  try {
+    const { dogs_ids } = req.body;
+    const sponsors = await wordpressService.fetchSponsorsByDogsIds(dogs_ids);
+    const structured_sponsors = sponsors.reduce((acc, sponsor) => {
+      acc[sponsor.dog_id] = acc[sponsor.dog_id] || [];
+      acc[sponsor.dog_id].push({
+        dog_sponsor_id: sponsor.dog_sponsor_id,
+        sponsor_id: sponsor.sponsor_id,
+        name: sponsor.name,
+        email: sponsor.email,
+        is_active: sponsor.is_active,
+        created_at: sponsor.created_at,
+      });
+
+      return acc;
+    }, {});
+    res.status(200).json({
+      ok: true,
+      count: structured_sponsors.length,
+      structured_sponsors,
+    });
+  } catch (error) {
+    console.error(
+      "Error en el controlador al la lista de perros y padrinos:",
+      error
+    );
+    res.status(500).json({
+      ok: false,
+      message: "Error interno del servidor al la lista de perros y padrinos.",
+      errorCode: "SPONSORS_FETCH_ERROR",
+    });
+  }
+};
+
 const saveSponsor = async (req, res) => {
   try {
     const { name, email } = req.body;
@@ -78,6 +113,11 @@ const saveDogSponsor = async (req, res) => {
   }
 };
 
-const wordpressController = { getDogs, saveSponsor, saveDogSponsor };
+const wordpressController = {
+  getDogs,
+  saveSponsor,
+  saveDogSponsor,
+  getSponsorsByDogsIds,
+};
 
 export default wordpressController;
