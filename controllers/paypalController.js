@@ -1,5 +1,4 @@
 import getPaypalInstance from "../services/paypalServices.js";
-import AppError from "../utils/AppError.js";
 
 const getAllSubscriptionsPlans = async (req, res, next) => {
   try {
