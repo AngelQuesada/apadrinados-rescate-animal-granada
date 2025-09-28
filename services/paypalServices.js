@@ -1,5 +1,6 @@
 import config from "../config/index.js";
 import { createSubscribersDataStructure } from "./helpers/paypalServiceHelpers.js";
+import AppError from "../utils/AppError.js";
 
 class PayPalService {
   #baseUrl;
@@ -32,8 +33,9 @@ class PayPalService {
       : config.paypal.sandbox_client_secret;
 
     if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-      throw new Error(
-        "Las credenciales de PayPal no están configuradas correctamente en las variables de entorno"
+      throw new AppError(
+        "Las credenciales de PayPal no están configuradas correctamente en las variables de entorno",
+        500
       );
     }
 
@@ -60,8 +62,9 @@ class PayPalService {
           statusText: response.statusText,
           error: errorData,
         });
-        throw new Error(
-          `Error de autenticación con PayPal: ${response.status} ${response.statusText}`
+        throw new AppError(
+          `Error de autenticación con PayPal: ${response.status} ${response.statusText}`,
+          response.status
         );
       }
 
@@ -69,8 +72,9 @@ class PayPalService {
       return data.access_token;
     } catch (error) {
       console.error("Error al obtener el token de PayPal:", error);
-      throw new Error(
-        "No se pudo obtener el token de acceso. Verifica las credenciales de PayPal."
+      throw new AppError(
+        "No se pudo obtener el token de acceso. Verifica las credenciales de PayPal.",
+        500
       );
     }
   }
@@ -90,8 +94,9 @@ class PayPalService {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error en la respuesta de PayPal:", errorData);
-        throw new Error(
-          `Error al obtener el plan de suscripción: ${response.status} ${response.statusText}`
+        throw new AppError(
+          `Error al obtener el plan de suscripción: ${response.status} ${response.statusText}`,
+          response.status
         );
       }
 
@@ -99,8 +104,9 @@ class PayPalService {
       return data;
     } catch (error) {
       console.error("Error al consultar la app de suscripciones:", error);
-      throw new Error(
-        "Error en la capa de servicio al consultar un plan de suscripciones."
+      throw new AppError(
+        "Error en la capa de servicio al consultar un plan de suscripciones.",
+        500
       );
     }
   }
@@ -118,8 +124,9 @@ class PayPalService {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error en la respuesta de PayPal:", errorData);
-        throw new Error(
-          `Error al obtener el plan de suscripción: ${response.status} ${response.statusText}`
+        throw new AppError(
+          `Error al obtener el plan de suscripción: ${response.status} ${response.statusText}`,
+          response.status
         );
       }
 
@@ -127,8 +134,9 @@ class PayPalService {
       return data;
     } catch (error) {
       console.error("Error al consultar la app de suscripciones:", error);
-      throw new Error(
-        "Error en la capa de servicio al consultar un plan de suscripciones."
+      throw new AppError(
+        "Error en la capa de servicio al consultar un plan de suscripciones.",
+        500
       );
     }
   }
@@ -146,8 +154,9 @@ class PayPalService {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error en la respuesta de PayPal:", errorData);
-        throw new Error(
-          `Error al obtener el plan de suscripción: ${response.status} ${response.statusText}`
+        throw new AppError(
+          `Error al obtener el plan de suscripción: ${response.status} ${response.statusText}`,
+          response.status
         );
       }
       const result = await response.json();
@@ -157,8 +166,9 @@ class PayPalService {
         "Error al consultar los detalles de la suscripción:",
         error
       );
-      throw new Error(
-        "Error en la capa de servicio al obtener los detalles de la suscripción."
+      throw new AppError(
+        "Error en la capa de servicio al obtener los detalles de la suscripción.",
+        500
       );
     }
   }
@@ -180,8 +190,9 @@ class PayPalService {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error en la respuesta de PayPal:", errorData);
-        throw new Error(
-          `Error al obtener suscriptores: ${response.status} ${response.statusText}`
+        throw new AppError(
+          `Error al obtener suscriptores: ${response.status} ${response.statusText}`,
+          response.status
         );
       }
 
@@ -208,8 +219,9 @@ class PayPalService {
     } catch (error) {
       console.error("Error al consultar los suscriptores de PayPal:", error);
       // Lanzamos el error para que el controlador pueda capturarlo.
-      throw new Error(
-        "Error en la capa de servicio al obtener los suscriptores del plan."
+      throw new AppError(
+        "Error en la capa de servicio al obtener los suscriptores del plan.",
+        500
       );
     }
   }

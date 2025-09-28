@@ -25,7 +25,7 @@ const getDogs = async (req, res, next) => {
   }
 };
 
-const getSponsorsByDogsIds = async (req, res) => {
+const getSponsorsByDogsIds = async (req, res, next) => {
   try {
     const { dogs_ids } = req.body;
     const sponsors = await wordpressService.fetchSponsorsByDogsIds(dogs_ids);
@@ -48,19 +48,11 @@ const getSponsorsByDogsIds = async (req, res) => {
       structured_sponsors,
     });
   } catch (error) {
-    console.error(
-      "Error en el controlador al la lista de perros y padrinos:",
-      error
-    );
-    res.status(500).json({
-      ok: false,
-      message: "Error interno del servidor al la lista de perros y padrinos.",
-      errorCode: "SPONSORS_FETCH_ERROR",
-    });
+    next(error);
   }
 };
 
-const saveSponsor = async (req, res) => {
+const saveSponsor = async (req, res, next) => {
   try {
     const { name, email } = req.body;
     await wordpressService.saveSponsor(name, email);
@@ -69,16 +61,11 @@ const saveSponsor = async (req, res) => {
       message: "Suscriptor guardado con éxito.",
     });
   } catch (error) {
-    console.error("Error en el controlador al guardar el suscriptor:", error);
-    res.status(500).json({
-      ok: false,
-      message: "Error interno del servidor al guardar el suscriptor.",
-      errorCode: "SPONSOR_SAVE_ERROR",
-    });
+    next(error);
   }
 };
 
-const saveDogSponsor = async (req, res) => {
+const saveDogSponsor = async (req, res, next) => {
   try {
     const { dog_id, sponsor_id, start_date, end_date, source, is_active } =
       req.body;
@@ -95,16 +82,7 @@ const saveDogSponsor = async (req, res) => {
       message: "Relación padrino-perro guardada con éxito.",
     });
   } catch (error) {
-    console.error(
-      "Error en el controlador al guardar la relación padrino-perro:",
-      error
-    );
-    res.status(500).json({
-      ok: false,
-      message:
-        "Error interno del servidor al guardar la relación padrino-perro.",
-      errorCode: "DOG_SPONSOR_SAVE_ERROR",
-    });
+    next(error);
   }
 };
 

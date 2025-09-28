@@ -1,4 +1,5 @@
 import config from "../config/index.js";
+import AppError from "../utils/AppError.js";
 
 const fetchAllDogs = async () => {
   const sqlQuery = `
@@ -25,8 +26,9 @@ const fetchAllDogs = async () => {
     return rows;
   } catch (error) {
     console.error("Error al consultar la base de datos:", error);
-    throw new Error(
-      "Error en la capa de servicio al obtener los datos de los perros."
+    throw new AppError(
+      "Error en la capa de servicio al obtener los datos de los perros.",
+      500
     );
   }
 };
@@ -51,8 +53,9 @@ const fetchSponsorsByDogsIds = async (dogs_ids) => {
       "Error al obtener los sponsors por perros en el service:",
       error
     );
-    throw new Error(
-      "Error en la capa de servicio al obtener los sponsors por perros."
+    throw new AppError(
+      "Error en la capa de servicio al obtener los sponsors por perros.",
+      500
     );
   }
 };
@@ -66,7 +69,10 @@ const saveSponsor = async (name, email) => {
     await config.db.query(sqlQuery, [name, email]);
   } catch (error) {
     console.error("Error al guardar la suscripción:", error);
-    throw new Error("Error en la capa de servicio al guardar la suscripción.");
+    throw new AppError(
+      "Error en la capa de servicio al guardar la suscripción.",
+      500
+    );
   }
 };
 
@@ -97,8 +103,9 @@ const saveDogSponsor = async (
     ]);
   } catch (error) {
     console.error("Error al guardar la relación padrino-perro:", error);
-    throw new Error(
-      "Error en la capa de servicio al guardar la relación padrino-perro."
+    throw new AppError(
+      "Error en la capa de servicio al guardar la relación padrino-perro.",
+      500
     );
   }
 };
