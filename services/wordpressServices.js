@@ -1,5 +1,5 @@
 import config from "../config/index.js";
-import AppError from "../utils/AppError.js";
+import AppError from "#utils/AppError.js";
 
 const fetchAllDogs = async () => {
   const sqlQuery = `
