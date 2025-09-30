@@ -35,16 +35,22 @@ const fetchAllDogs = async () => {
 
 const fetchSponsorsByDogsIds = async (dogs_ids) => {
   const query = `SELECT
-        ds.dog_id,
-        ds.sponsor_id,
-        ds.id AS dog_sponsor_id,
-        s.name,
-        s.email,
-        ds.is_active,
-        ds.created_at
-      FROM wp_custom_dog_sponsors ds
-      JOIN wp_custom_sponsors s ON ds.sponsor_id = s.id
-      WHERE ds.dog_id IN (?);`;
+    ds.dog_id,
+    ds.sponsor_id,
+    ds.id AS dog_sponsor_id,
+    s.name,
+    s.email,
+    ds.is_active,
+    ds.created_at,
+    pm.meta_value AS id_suscripcion_paypal
+FROM
+    wp_custom_dog_sponsors ds
+JOIN
+    wp_custom_sponsors s ON ds.sponsor_id = s.id
+LEFT JOIN
+    wp_postmeta pm ON ds.dog_id = pm.post_id AND pm.meta_key = 'id_suscripcion_paypal'
+WHERE
+    ds.dog_id IN (?)`;
   try {
     const [rows] = await config.db.query(query, [dogs_ids]);
     return rows;

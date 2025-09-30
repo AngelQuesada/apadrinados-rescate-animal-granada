@@ -38,6 +38,7 @@ const getSponsorsByDogsIds = async (req, res, next) => {
         email: sponsor.email,
         is_active: sponsor.is_active,
         created_at: sponsor.created_at,
+        id_suscripcion_paypal: sponsor.id_suscripcion_paypal,
       });
 
       return acc;
