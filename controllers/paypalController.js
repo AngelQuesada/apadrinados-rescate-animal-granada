@@ -3,10 +3,10 @@ import getPaypalInstance from "../services/paypalServices.js";
 const getAllSubscriptionsPlans = async (req, res, next) => {
   try {
     const paypalServices = await getPaypalInstance();
-    console.log("paypalServices", paypalServices);
     const allPlans = await paypalServices.fetchSubscriptions();
     res.status(200).json(allPlans.plans);
   } catch (error) {
+    console.error("Error al obtener los planes de suscripción:", error);
     next(error);
   }
 };
@@ -18,6 +18,7 @@ const getAllSubscriptionsPlansIds = async (req, res, next) => {
     const plansIds = allPlans.plans.map((plan) => plan.id);
     res.status(200).json(plansIds);
   } catch (error) {
+    console.error("Error al obtener los planes de suscripción:", error);
     next(error);
   }
 };
@@ -31,27 +32,25 @@ const getSubscribersFromAllSubscriptionsPlans = async (req, res, next) => {
       await paypalServices.fetchSubscribersFromSubscriptionsPlans(plansIds);
     res.status(200).json(subscribers);
   } catch (error) {
+    console.error("Error al obtener los suscriptores de los planes:", error);
     next(error);
   }
 };
 
-const getSubscribersFromSubscriptionPlan = async (req, res, next) => {
+const getSubscribersFromSubscriptionsPlans = async (req, res, next) => {
   try {
     const { plansIds } = req.params;
+    const plansIdsList = plansIds.split(",");
     const paypalServices = await getPaypalInstance();
     const subscribers =
-      await paypalServices.fetchSubscribersFromSubscriptionsPlans(plansIds);
+      await paypalServices.fetchSubscribersFromSubscriptionsPlans(plansIdsList);
     res.status(200).json(subscribers);
   } catch (error) {
+    console.error("Error al obtener los suscriptores de los planes:", error);
     next(error);
   }
 };
 
-/**
- * Obtiene los detalles completos de un plan incluyendo suscriptores activos
- * @param {Object} req - Objeto de solicitud
- * @param {Object} res - Objeto de respuesta
- */
 const getSubscriptionPlanDetails = async (req, res, next) => {
   try {
     const { planId } = req.params;
@@ -61,6 +60,7 @@ const getSubscriptionPlanDetails = async (req, res, next) => {
       data: planDetails,
     });
   } catch (error) {
+    console.error("Error al obtener los detalles del plan:", error);
     next(error);
   }
 };
@@ -70,5 +70,5 @@ export default {
   getAllSubscriptionsPlans,
   getSubscriptionPlanDetails,
   getSubscribersFromAllSubscriptionsPlans,
-  getSubscribersFromSubscriptionPlan,
+  getSubscribersFromSubscriptionsPlans,
 };

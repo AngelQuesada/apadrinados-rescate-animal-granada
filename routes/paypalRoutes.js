@@ -1,6 +1,7 @@
 import express from "express";
-const router = express.Router();
 import paypalController from "../controllers/paypalController.js";
+
+const router = express.Router();
 
 router.get(
   "/get-subcriptions-plans/",
@@ -11,8 +12,12 @@ router.get(
   paypalController.getAllSubscriptionsPlansIds
 );
 router.get(
-  "/get-subscribers-for-all-subcriptions-plans/",
+  "/get-subscribers-from-all-subcriptions-plans/",
   paypalController.getSubscribersFromAllSubscriptionsPlans
+);
+router.get(
+  "/get-subscribers-from-subscriptions-plans/:plansIds",
+  paypalController.getSubscribersFromSubscriptionsPlans
 );
 
 export default router;

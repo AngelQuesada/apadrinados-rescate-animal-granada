@@ -175,9 +175,9 @@ class PayPalService {
 
   async fetchSubscribersFromSubscriptionsPlans(plansIds) {
     try {
-      let url = `${
-        this.#baseUrl
-      }/billing/subscriptions?plan_ids=${plansIds.join(",")}`;
+      let url = `${this.#baseUrl}/billing/subscriptions?plan_id=${plansIds.join(
+        "&plan_id="
+      )}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -218,7 +218,6 @@ class PayPalService {
       return subscribersData;
     } catch (error) {
       console.error("Error al consultar los suscriptores de PayPal:", error);
-      // Lanzamos el error para que el controlador pueda capturarlo.
       throw new AppError(
         "Error en la capa de servicio al obtener los suscriptores del plan.",
         500

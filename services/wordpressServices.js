@@ -4,6 +4,7 @@ import AppError from "#utils/AppError.js";
 const fetchAllDogs = async () => {
   const sqlQuery = `
     SELECT 
+        p.ID AS id,
         p.post_title, 
         p.post_modified, 
         p.post_status, 
@@ -42,6 +43,7 @@ const fetchSponsorsByDogsIds = async (dogs_ids) => {
     s.email,
     ds.is_active,
     ds.created_at,
+    ds.source,
     pm.meta_value AS id_suscripcion_paypal
 FROM
     wp_custom_dog_sponsors ds
@@ -66,17 +68,30 @@ WHERE
   }
 };
 
-const saveSponsor = async (name, email) => {
-  const sqlQuery = `
-    INSERT INTO wp_custom_sponsors (name, email, created_at, updated_at)
-    VALUES (?,?,NOW(),NOW())
-  `;
-  try {
-    await config.db.query(sqlQuery, [name, email]);
-  } catch (error) {
-    console.error("Error al guardar la suscripción:", error);
+const saveSponsors = async (sponsors) => {
+  if (!sponsors || sponsors.length === 0) {
     throw new AppError(
-      "Error en la capa de servicio al guardar la suscripción.",
+      "No se proporcionaron patrocinadores para guardar.",
+      500
+    );
+  }
+
+  let sqlQuery = `
+    INSERT INTO wp_custom_sponsors (name, email, created_at, updated_at)
+    VALUES 
+  `;
+
+  const placeholders = sponsors.map(() => "(?, ?, NOW(), NOW())").join(", ");
+
+  const values = sponsors.flatMap((sponsor) => [sponsor.name, sponsor.email]);
+
+  try {
+    await config.db.query(sqlQuery + placeholders, values);
+    console.log(`${sponsors.length} patrocinadores guardados exitosamente.`);
+  } catch (error) {
+    console.error("Error al guardar los patrocinadores:", error);
+    throw new AppError(
+      "Error en la capa de servicio al guardar los patrocinadores.",
       500
     );
   }
@@ -118,7 +133,7 @@ const saveDogSponsor = async (
 
 export default {
   fetchAllDogs,
-  saveSponsor,
+  saveSponsors,
   saveDogSponsor,
   fetchSponsorsByDogsIds,
 };
