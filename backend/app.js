@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import config from "./config/index.js";
 import errorHandler from "#middlewares/errorHandler.js";
 
@@ -9,6 +10,7 @@ import paypalRoutes from "./routes/paypalRoutes.js";
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 // Rutas
 app.use("/api/wordpress", wordpressRoutes);
