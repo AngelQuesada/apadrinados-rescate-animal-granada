@@ -10,7 +10,6 @@ export const DogsProvider = ({ children }) => {
     axios
       .get("http://localhost:3000/api/wordpress/get-dogs-structured-data")
       .then((response) => {
-        console.log(response);
         setDogs(response.data.dogs);
       })
       .catch((error) => {
