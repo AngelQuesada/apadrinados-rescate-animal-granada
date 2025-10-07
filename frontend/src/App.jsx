@@ -5,6 +5,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
 import Layout from "./components/Layout/Layout";
 import { Container } from "@mui/material";
+import { UIProvider } from "./context/UIContext";
+import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 
 function DogsList() {
   const { dogs, loading } = useDogsContext();
@@ -30,14 +32,18 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <DogsProvider>
-        <Layout>
-          <Container maxWidth="lg">
-            <h1>Perros</h1>
-            <DogsList />
-          </Container>
-        </Layout>
-      </DogsProvider>
+      <UIProvider>
+        <DogsProvider>
+          <LoadingScreen />
+          <Layout>
+            <Container maxWidth="lg">
+              <h1>Perros</h1>
+              <DogsList />
+            </Container>
+            <LoadingScreen />
+          </Layout>
+        </DogsProvider>
+      </UIProvider>
     </ThemeProvider>
   );
 }
