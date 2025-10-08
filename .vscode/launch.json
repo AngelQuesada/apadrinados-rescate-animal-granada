@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "DEBUG Backend",
             "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/app.js",
+            "program": "${workspaceFolder}/backend/app.js",
             "restart": true,
             "console": "integratedTerminal",
             "skipFiles": [
@@ -18,12 +18,43 @@
             "request": "launch",
             "name": "Seed Script",
             "runtimeExecutable": "nodemon",
-            "program": "${workspaceFolder}/db/seed.js",
+            "program": "${workspaceFolder}/backend/db/seed.js",
             "restart": true,
             "console": "integratedTerminal",
             "skipFiles": [
                 "<node_internals>/**"
             ]
+        },
+        {
+            "name": "Run Frontend",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "cwd": "${workspaceFolder}/frontend",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Backend",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "nodemon",
+            "program": "${workspaceFolder}/backend/app.js",
+            "restart": true,
+            "console": "integratedTerminal"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Start DEV",
+            "configurations": [
+                "Run Frontend",
+                "Run Backend"
+            ],
+            "stopAll": true
         }
     ]
 }
