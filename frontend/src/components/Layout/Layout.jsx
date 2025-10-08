@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        bgcolor: "#EBEBEBFF",
+        bgcolor: "#F1F1F1FF",
       }}
     >
       <Header />
@@ -17,9 +17,9 @@ const Layout = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 0, sm: 3 },
           m: { xs: 0, sm: 3 },
-          bgcolor: { xs: "transparent", sm: "background.paper" },
+          bgcolor: "background.paper",
           boxShadow: { xs: "none", sm: 1 },
         }}
       >

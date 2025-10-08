@@ -11,7 +11,7 @@ const getStructuredDogsData = async (req, res, next) => {
         name: perro.post_title,
         modified: perro.post_modified,
         status: perro.post_status,
-        image_url: perro.featured_image_url,
+        imageUrl: perro.featured_image_url,
         id_paypal_subscription: perro.id_suscripcion_paypal,
         sponsors: [],
       }));
