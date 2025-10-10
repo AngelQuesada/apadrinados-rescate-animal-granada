@@ -18,6 +18,7 @@ import { Edit, Delete, Add } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "../../hooks/components/useDogProfile";
+import { useSnackbar } from "../../hooks/context/useSnackbar";
 
 const DogProfile = () => {
   const {
@@ -32,6 +33,8 @@ const DogProfile = () => {
     bottomPadding,
     setSelectedSponsors,
   } = useDogProfile();
+
+  const { showSnackbar } = useSnackbar();
 
   if (loading) {
     return (
@@ -57,6 +60,14 @@ const DogProfile = () => {
         return [...prevSelected, sponsorId];
       }
     });
+  };
+
+  const handleAddSponsor = () => {
+    showSnackbar("No implementado aún", "warning");
+  };
+
+  const handleDeleteSelection = () => {
+    showSnackbar("No implementado aún", "warning");
   };
 
   if (!dog) {
@@ -198,17 +209,20 @@ const DogProfile = () => {
             mb: "5px",
           }}
         >
+          <Tooltip title="Añadir Padrino">
+            <IconButton onClick={handleAddSponsor} color="primary">
+              <Add />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Eliminar seleccionados">
             <span>
-              <IconButton disabled={selectedSponsors.length === 0}>
+              <IconButton
+                onClick={handleDeleteSelection}
+                disabled={selectedSponsors.length === 0}
+              >
                 <Delete />
               </IconButton>
             </span>
-          </Tooltip>
-          <Tooltip title="Añadir Padrino">
-            <IconButton color="primary">
-              <Add />
-            </IconButton>
           </Tooltip>
         </Paper>
       </Box>
