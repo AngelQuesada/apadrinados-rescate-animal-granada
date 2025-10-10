@@ -27,6 +27,7 @@ const ImagePopup = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "column",
   };
 
   const popupImageStyles = {

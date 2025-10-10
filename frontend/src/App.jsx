@@ -1,13 +1,16 @@
+import { Routes, Route } from "react-router-dom";
 import { DogsProvider } from "./context/DogsContext";
+import { UIProvider } from "./context/UIContext";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
+
 import Layout from "./components/Layout/Layout";
 import { Container } from "@mui/material";
-import { UIProvider } from "./context/UIContext";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import DogsGrid from "./components/DogsGrid/DogsGrid";
 import ImagePopup from "./components/ImagePopUp/ImagePopUp";
+import DogProfile from "./pages/DogProfile/DogProfile";
 
 function App() {
   return (
@@ -18,11 +21,16 @@ function App() {
           <LoadingScreen />
           <Layout>
             <Container>
-              <DogsGrid />
+              <Routes>
+                <Route
+                  path="/"
+                  element={<DogsGrid />}
+                />
+                <Route path="/dog-profile/:id" element={<DogProfile />} />
+              </Routes>
             </Container>
-            <LoadingScreen />
-            <ImagePopup />
           </Layout>
+          <ImagePopup />
         </DogsProvider>
       </UIProvider>
     </ThemeProvider>

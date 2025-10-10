@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import { ContentCopy, FormatListBulleted } from "@mui/icons-material";
 import { useUIContext } from "../../hooks/context/useUIContext";
+import { Link } from "react-router-dom";
 
-const DogCard = ({ name, imageUrl, sponsors, status, modified }) => {
+const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
   const sponsorCount = sponsors ? sponsors.length : 0;
   const isPublished = status === "publish";
   const { setImagePopupOpen, setImageUrlForPopup } = useUIContext();
@@ -62,9 +63,14 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified }) => {
           <Divider variant="middle" />
           <CardActions sx={{ justifyContent: "center" }}>
             <Tooltip title="Ver lista">
-              <IconButton sx={buttonStyles}>
-                <FormatListBulleted />
-              </IconButton>
+              <Link
+                to={`/dog-profile/${id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <IconButton sx={buttonStyles}>
+                  <FormatListBulleted />
+                </IconButton>
+              </Link>
             </Tooltip>
             <Tooltip title="Copiar lista">
               <IconButton sx={buttonStyles}>

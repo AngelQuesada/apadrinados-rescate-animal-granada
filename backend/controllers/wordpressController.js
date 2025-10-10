@@ -30,7 +30,7 @@ const getStructuredDogsData = async (req, res, next) => {
         email: sponsor.email,
         is_active: sponsor.is_active,
         created_at: sponsor.created_at,
-        source: sponsor.source,
+        source: parseInt(sponsor.source),
         id_suscripcion_paypal: sponsor.id_suscripcion_paypal,
       });
 
