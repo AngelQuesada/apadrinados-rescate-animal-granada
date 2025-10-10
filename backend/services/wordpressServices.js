@@ -131,9 +131,34 @@ const saveDogSponsor = async (
   }
 };
 
+const getAllSponsors = async () => {
+  const query = `
+    SELECT 
+      id, 
+      name, 
+      email, 
+      created_at, 
+      updated_at 
+    FROM 
+      wp_custom_sponsors
+  `;
+
+  try {
+    const [rows] = await config.db.query(query);
+    return rows;
+  } catch (error) {
+    console.error("Error al obtener todos los sponsors en el service:", error);
+    throw new AppError(
+      "Error en la capa de servicio al obtener todos los sponsors.",
+      500
+    );
+  }
+};
+
 export default {
   fetchAllDogs,
   saveSponsors,
   saveDogSponsor,
   fetchSponsorsByDogsIds,
+  getAllSponsors,
 };

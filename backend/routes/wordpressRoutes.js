@@ -13,5 +13,6 @@ router.get(
   "/get-sponsors-by-dogs-ids",
   wordpressController.getSponsorsByDogsIds
 );
+router.get("/get-all-sponsors", wordpressController.getAllSponsors);
 
 export default router;

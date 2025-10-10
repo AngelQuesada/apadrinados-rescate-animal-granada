@@ -118,11 +118,25 @@ const saveDogSponsor = async (req, res, next) => {
   }
 };
 
+const getAllSponsors = async (req, res, next) => {
+  try {
+    const sponsors = await wordpressService.getAllSponsors();
+    res.status(200).json({
+      ok: true,
+      count: sponsors.length,
+      sponsors,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const wordpressController = {
   getStructuredDogsData,
   saveSponsors,
   saveDogSponsor,
   getSponsorsByDogsIds,
+  getAllSponsors,
 };
 
 export default wordpressController;
