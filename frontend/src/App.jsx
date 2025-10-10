@@ -11,6 +11,7 @@ import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 import DogsGrid from "./components/DogsGrid/DogsGrid";
 import ImagePopup from "./components/ImagePopUp/ImagePopUp";
 import DogProfile from "./pages/DogProfile/DogProfile";
+import SponsorForm from "./components/SponsorForm/SponsorForm";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             </Container>
           </Layout>
           <ImagePopup />
+          <SponsorForm />
         </DogsProvider>
       </UIProvider>
     </ThemeProvider>

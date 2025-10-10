@@ -5,6 +5,18 @@ export const UIProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [imagePopupOpen, setImagePopupOpen] = useState(false);
   const [imageUrlForPopup, setImageUrlForPopup] = useState("");
+  const [sponsorForm, setSponsorForm] = useState({
+    isOpen: false,
+    sponsor: null,
+  });
+
+  const openSponsorForm = (sponsor = null) => {
+    setSponsorForm({ isOpen: true, sponsor });
+  };
+
+  const closeSponsorForm = () => {
+    setSponsorForm({ isOpen: false, sponsor: null });
+  };
 
   return (
     <UIContext.Provider
@@ -15,6 +27,9 @@ export const UIProvider = ({ children }) => {
         setImagePopupOpen,
         imageUrlForPopup,
         setImageUrlForPopup,
+        sponsorForm,
+        openSponsorForm,
+        closeSponsorForm,
       }}
     >
       {children}

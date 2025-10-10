@@ -4,6 +4,7 @@ import { DogsContext } from "./dogs-context-definition";
 
 export const DogsProvider = ({ children }) => {
   const [dogs, setDogs] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,11 +21,26 @@ export const DogsProvider = ({ children }) => {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/wordpress/get-all-sponsors")
+      .then((response) => {
+        setSponsors(response.data.sponsors);
+      })
+      .catch((error) => {
+        console.error("Error al cargar los patrocinadores:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <DogsContext.Provider
       value={{
         dogs,
         loading,
+        sponsors,
       }}
     >
       {children}

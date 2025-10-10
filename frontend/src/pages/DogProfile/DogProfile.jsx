@@ -20,6 +20,8 @@ import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "../../hooks/components/useDogProfile";
 import { useSnackbar } from "../../hooks/context/useSnackbar";
 
+import { useUIContext } from "../../hooks/context/useUIContext";
+
 const DogProfile = () => {
   const {
     dog,
@@ -35,6 +37,7 @@ const DogProfile = () => {
   } = useDogProfile();
 
   const { showSnackbar } = useSnackbar();
+  const { openSponsorForm } = useUIContext();
 
   if (loading) {
     return (
@@ -63,7 +66,7 @@ const DogProfile = () => {
   };
 
   const handleAddSponsor = () => {
-    showSnackbar("No implementado aún", "warning");
+    openSponsorForm();
   };
 
   const handleDeleteSelection = () => {
@@ -176,7 +179,10 @@ const DogProfile = () => {
                   <TableCell>
                     <Tooltip title="Editar">
                       <span>
-                        <IconButton disabled={isPaypalSponsor}>
+                        <IconButton
+                          disabled={isPaypalSponsor}
+                          onClick={() => openSponsorForm(sponsor)}
+                        >
                           <Edit />
                         </IconButton>
                       </span>
