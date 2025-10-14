@@ -25,7 +25,7 @@ const getStructuredDogsData = async (req, res, next) => {
       acc[sponsor.dog_id] = acc[sponsor.dog_id] || [];
       acc[sponsor.dog_id].push({
         dog_sponsor_id: sponsor.dog_sponsor_id,
-        sponsor_id: sponsor.sponsor_id,
+        id: sponsor.sponsor_id,
         name: sponsor.name,
         email: sponsor.email,
         is_active: sponsor.is_active,

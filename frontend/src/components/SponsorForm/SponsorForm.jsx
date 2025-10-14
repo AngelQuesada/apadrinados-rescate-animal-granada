@@ -16,7 +16,8 @@ import { modalStyle } from "./sponsorFormStyles";
 
 const SponsorForm = () => {
   const { sponsorForm, closeSponsorForm } = useUIContext();
-  const { sponsors } = useDogsContext();
+  const { sponsors, onDogProfile } = useDogsContext();
+  const profileDogSponsors = onDogProfile?.sponsors || [];
 
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [errors, setErrors] = useState({ name: "", email: "" });
@@ -28,10 +29,10 @@ const SponsorForm = () => {
     if (sponsorForm.isOpen) {
       if (isEditMode) {
         setFormData({
-          name: sponsorForm.sponsor.name,
-          email: sponsorForm.sponsor.email,
+          name: sponsorForm.sponsor.name || "",
+          email: sponsorForm.sponsor.email || "",
         });
-        setEmailInputValue(sponsorForm.sponsor.email);
+        setEmailInputValue(sponsorForm.sponsor.email || "");
       } else {
         setFormData({ name: "", email: "" });
         setEmailInputValue("");
@@ -88,6 +89,20 @@ const SponsorForm = () => {
     closeSponsorForm();
   };
 
+  const filterExistingSponsors = () => {
+    return emailInputValue?.length > 5
+      ? sponsors.filter(
+          (sponsor) =>
+            sponsor.email
+              .toLowerCase()
+              .startsWith(emailInputValue.toLowerCase()) &&
+            !profileDogSponsors.find(
+              (profileSponsor) => profileSponsor.id === sponsor.id
+            )
+        )
+      : [];
+  };
+
   return (
     <Modal open={sponsorForm.isOpen} onClose={handleClose} closeAfterTransition>
       <Fade in={sponsorForm.isOpen}>
@@ -126,15 +141,7 @@ const SponsorForm = () => {
             />
             <Autocomplete
               freeSolo
-              options={
-                emailInputValue.length > 5
-                  ? sponsors.filter((sponsor) =>
-                      sponsor.email
-                        .toLowerCase()
-                        .startsWith(emailInputValue.toLowerCase())
-                    )
-                  : []
-              }
+              options={filterExistingSponsors()}
               getOptionLabel={(option) =>
                 typeof option === "string" ? option : option.email
               }

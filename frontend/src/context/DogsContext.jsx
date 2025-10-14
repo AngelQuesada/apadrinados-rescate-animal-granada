@@ -1,8 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DogsContext } from "./dogs-context-definition";
 import useAxios from "../hooks/useAxios";
 
 export const DogsProvider = ({ children }) => {
+  const [onDogProfile, setOnDogProfile] = useState(false);
+
   const {
     data: dogsData,
     error: dogsError,
@@ -56,8 +58,10 @@ export const DogsProvider = ({ children }) => {
       sponsors: sponsorsData?.sponsors || [],
       loading: dogsLoading || sponsorsLoading,
       error: error,
+      onDogProfile,
+      setOnDogProfile,
     }),
-    [dogsData, sponsorsData, dogsLoading, sponsorsLoading, error]
+    [dogsData, sponsorsData, dogsLoading, sponsorsLoading, error, onDogProfile]
   );
 
   return (

@@ -6,7 +6,7 @@ const useDogProfile = () => {
   const [bottomPadding, setBottomPadding] = useState(0);
   const [selectedSponsors, setSelectedSponsors] = useState([]);
 
-  const { dogs, loading } = useDogsContext();
+  const { dogs, loading, setOnDogProfile } = useDogsContext();
   const menuRef = useRef(null);
 
   const { id } = useParams();
@@ -14,6 +14,10 @@ const useDogProfile = () => {
   const dog = dogs.find((d) => d.id === parseInt(id));
 
   const { name, imageUrl, sponsors, modified } = dog || {};
+
+  useEffect(() => {
+    setOnDogProfile(dog);
+  }, [dog, setOnDogProfile]);
 
   useEffect(() => {
     if (menuRef.current) {
