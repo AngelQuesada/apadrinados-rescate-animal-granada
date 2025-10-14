@@ -6,25 +6,13 @@ import {
   Fade,
   IconButton,
   Modal,
-  Slide,
   TextField,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useUIContext } from "../../hooks/context/useUIContext";
 import { useDogsContext } from "../../hooks/context/useDogsContext";
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-};
+import { modalStyle } from "./sponsorFormStyles";
 
 const SponsorForm = () => {
   const { sponsorForm, closeSponsorForm } = useUIContext();
@@ -56,13 +44,11 @@ const SponsorForm = () => {
     const newErrors = { name: "", email: "" };
     let isValid = true;
 
-    // Name validation
     if (formData.name.trim().length < 3) {
       newErrors.name = "El nombre debe tener al menos 3 caracteres.";
       isValid = false;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       newErrors.email = "Por favor, introduce un email válido.";

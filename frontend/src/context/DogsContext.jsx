@@ -1,49 +1,66 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect, useMemo } from "react";
 import { DogsContext } from "./dogs-context-definition";
+import useAxios from "../hooks/useAxios";
 
 export const DogsProvider = ({ children }) => {
-  const [dogs, setDogs] = useState([]);
-  const [sponsors, setSponsors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: dogsData,
+    error: dogsError,
+    loading: dogsLoading,
+    get: getDogs,
+  } = useAxios();
+
+  const {
+    data: sponsorsData,
+    error: sponsorsError,
+    loading: sponsorsLoading,
+    get: getSponsors,
+  } = useAxios();
+
+  // Realizamos las peticiones iniciales una sola vez
+  useEffect(() => {
+    const fetchDogsData = async () => {
+      try {
+        await getDogs("/wordpress/get-dogs-structured-data");
+      } catch (err) {
+        console.error("Error fetching dogs:", err);
+      }
+    };
+
+    fetchDogsData();
+  }, [getDogs]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/wordpress/get-dogs-structured-data")
-      .then((response) => {
-        setDogs(response.data.dogs);
-      })
-      .catch((error) => {
-        console.error("Error al cargar los perros:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    const fetchSponsorsData = async () => {
+      try {
+        await getSponsors("/wordpress/get-all-sponsors");
+      } catch (err) {
+        console.error("Error fetching sponsors:", err);
+      }
+    };
+
+    fetchSponsorsData();
+  }, [getSponsors]);
+
+  const error = dogsError || sponsorsError;
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/wordpress/get-all-sponsors")
-      .then((response) => {
-        setSponsors(response.data.sponsors);
-      })
-      .catch((error) => {
-        console.error("Error al cargar los patrocinadores:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    if (error) {
+      console.error("Error:", error);
+    }
+  }, [error]);
+
+  const contextValue = useMemo(
+    () => ({
+      dogs: dogsData?.dogs || [],
+      sponsors: sponsorsData?.sponsors || [],
+      loading: dogsLoading || sponsorsLoading,
+      error: error,
+    }),
+    [dogsData, sponsorsData, dogsLoading, sponsorsLoading, error]
+  );
 
   return (
-    <DogsContext.Provider
-      value={{
-        dogs,
-        loading,
-        sponsors,
-      }}
-    >
-      {children}
-    </DogsContext.Provider>
+    <DogsContext.Provider value={contextValue}>{children}</DogsContext.Provider>
   );
 };
