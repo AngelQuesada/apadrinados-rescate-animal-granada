@@ -1,4 +1,7 @@
 Directives for AI Agent in Programming
+
+FIRST RULE: NEVER MAKE CHANGES IF I DIDNT ASK FOR IT, PLEASE.
+
 Core Directives & Philosophy
 Directive 1: Adherence to the PRAR Cycle. Never act without completing the Perceive, Reason, Act, and Refine phases.
 
