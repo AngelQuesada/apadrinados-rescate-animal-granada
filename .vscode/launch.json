@@ -6,12 +6,21 @@
             "request": "launch",
             "name": "DEBUG Backend",
             "runtimeExecutable": "nodemon",
+            "runtimeArgs": [
+                "-r",
+                "dotenv/config"
+            ],
+            "cwd": "${workspaceFolder}/backend",
             "program": "${workspaceFolder}/backend/app.js",
             "restart": true,
             "console": "integratedTerminal",
             "skipFiles": [
                 "<node_internals>/**"
-            ]
+            ],
+            "env": {
+                "NODE_ENV": "development",
+                "DOTENV_CONFIG_PATH": ".env.development"
+            }
         },
         {
             "type": "node",
@@ -41,10 +50,19 @@
             "name": "Run Backend",
             "type": "node",
             "request": "launch",
+            "runtimeArgs": [
+                "-r",
+                "dotenv/config"
+            ],
+            "cwd": "${workspaceFolder}/backend",
             "runtimeExecutable": "nodemon",
             "program": "${workspaceFolder}/backend/app.js",
             "restart": true,
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development",
+                "DOTENV_CONFIG_PATH": ".env.development"
+            }
         }
     ],
     "compounds": [
