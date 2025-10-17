@@ -8,7 +8,13 @@ router.get(
   wordpressController.getStructuredDogsData
 );
 router.post("/save-sponsors", wordpressController.saveSponsors);
+router.post("/save-sponsor", wordpressController.saveSponsor);
 router.post("/save-dog-sponsor", wordpressController.saveDogSponsor);
+router.post(
+  "/save-sponsor-and-dog-sponsor",
+  wordpressController.saveSponsorAndDogSponsor
+);
+router.delete("/delete-dog-sponsor/:id", wordpressController.deleteDogSponsor);
 router.get(
   "/get-sponsors-by-dogs-ids",
   wordpressController.getSponsorsByDogsIds

@@ -97,6 +97,34 @@ const saveSponsors = async (req, res, next) => {
   }
 };
 
+const saveSponsor = async (req, res, next) => {
+  try {
+    const { name, email } = req.body;
+
+    await wordpressService.saveSponsor({ name, email });
+    res.status(200).json({
+      ok: true,
+      message: "Padrino guardado con éxito.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteDogSponsor = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    await wordpressService.deleteDogSponsor({ dogSponsorId: id });
+    res.status(200).json({
+      ok: true,
+      message: "Relación padrino - perro eliminada con éxito.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const saveDogSponsor = async (req, res, next) => {
   try {
     const { dog_id, sponsor_id, start_date, end_date, source, is_active } =
@@ -112,6 +140,42 @@ const saveDogSponsor = async (req, res, next) => {
     res.status(200).json({
       ok: true,
       message: "Relación padrino-perro guardada con éxito.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const saveSponsorAndDogSponsor = async (req, res, next) => {
+  try {
+    const { name, email, dog_id } = req.body;
+
+    const response = await wordpressService.saveSponsor({ name, email });
+
+    const { insertId } = response[0];
+
+    await wordpressService.saveDogSponsor({
+      dog_id,
+      sponsor_id: insertId,
+      end_date: null,
+      source: 0,
+      is_active: true,
+    });
+
+    const newSponsorData = {
+      dog_sponsor_id: response[0].insertId,
+      id: insertId,
+      name,
+      email,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      source: 0,
+    };
+
+    res.status(200).json({
+      ok: true,
+      message: "Padrino y relación con perro guardadas correctamente",
+      newSponsor: newSponsorData,
     });
   } catch (error) {
     next(error);
@@ -135,8 +199,11 @@ const wordpressController = {
   getStructuredDogsData,
   saveSponsors,
   saveDogSponsor,
+  saveSponsorAndDogSponsor,
   getSponsorsByDogsIds,
   getAllSponsors,
+  saveSponsor,
+  deleteDogSponsor,
 };
 
 export default wordpressController;

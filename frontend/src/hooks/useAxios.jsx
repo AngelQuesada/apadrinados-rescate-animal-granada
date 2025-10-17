@@ -19,9 +19,14 @@ const useAxios = () => {
       try {
         // Corregimos la forma en que se pasan los argumentos a los métodos de axios
         let response;
-        if (method === "get" || method === "delete") {
-          // GET y DELETE no tienen payload en el segundo argumento
-          response = await axiosInstance[method](url, config);
+        if (method === "get") {
+          response = await axiosInstance.get(url, config);
+        } else if (method === "delete") {
+          // Para DELETE, el payload se pasa en el objeto de configuración (config)
+          response = await axiosInstance.delete(url, {
+            ...config,
+            data: payload,
+          });
         } else {
           // POST, PUT, PATCH tienen payload en el segundo argumento y config en el tercero
           response = await axiosInstance[method](url, payload, config);

@@ -18,27 +18,28 @@ import { Edit, Delete, Add } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "../../hooks/components/useDogProfile";
-import { useSnackbar } from "../../hooks/context/useSnackbar";
-
-import { useUIContext } from "../../hooks/context/useUIContext";
 
 const DogProfile = () => {
   const {
-    dog,
+    profileDog,
     name,
     imageUrl,
-    sponsors,
+    dogSponsors,
     modified,
     menuRef,
     loading,
     selectedSponsors,
     bottomPadding,
-    setSelectedSponsors,
+    selectedSponsor,
+    handleSelectSponsor,
+    handleOpenSponsorForm,
+    handleDeleteSelection,
+    handleDeleteSponsor,
+    openSponsorForm,
+    loadingDeleteDogSponsor,
   } = useDogProfile();
 
-  const { showSnackbar } = useSnackbar();
-  const { openSponsorForm } = useUIContext();
-
+  // TODO: Tenemos nuestro propio componente de carga
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -47,33 +48,7 @@ const DogProfile = () => {
     );
   }
 
-  if (!dog) {
-    return (
-      <Box sx={{ textAlign: "center", mt: 4 }}>
-        <Typography variant="h5">Perro no encontrado</Typography>
-      </Box>
-    );
-  }
-
-  const handleSelectSponsor = (sponsorId) => {
-    setSelectedSponsors((prevSelected) => {
-      if (prevSelected.includes(sponsorId)) {
-        return prevSelected.filter((id) => id !== sponsorId);
-      } else {
-        return [...prevSelected, sponsorId];
-      }
-    });
-  };
-
-  const handleAddSponsor = () => {
-    openSponsorForm();
-  };
-
-  const handleDeleteSelection = () => {
-    showSnackbar("No implementado aún", "warning");
-  };
-
-  if (!dog) {
+  if (!profileDog) {
     return (
       <Box sx={{ textAlign: "center", mt: 4 }}>
         <Typography variant="h5">Perro no encontrado</Typography>
@@ -131,7 +106,7 @@ const DogProfile = () => {
 
           {/* Body Tabla */}
           <TableBody>
-            {sponsors.map((sponsor) => {
+            {dogSponsors.map((sponsor) => {
               const isPaypalSponsor = sponsor.source === 1;
               const isSelected = selectedSponsors.includes(
                 sponsor.dog_sponsor_id
@@ -189,7 +164,16 @@ const DogProfile = () => {
                     </Tooltip>
                     <Tooltip title="Eliminar">
                       <span>
-                        <IconButton disabled={isPaypalSponsor}>
+                        <IconButton
+                          loading={
+                            loadingDeleteDogSponsor &&
+                            selectedSponsor === sponsor.dog_sponsor_id
+                          }
+                          onClick={() => {
+                            handleDeleteSponsor(sponsor.dog_sponsor_id);
+                          }}
+                          disabled={isPaypalSponsor}
+                        >
                           <Delete />
                         </IconButton>
                       </span>
@@ -216,7 +200,7 @@ const DogProfile = () => {
           }}
         >
           <Tooltip title="Añadir Padrino">
-            <IconButton onClick={handleAddSponsor} color="primary">
+            <IconButton onClick={handleOpenSponsorForm} color="primary">
               <Add />
             </IconButton>
           </Tooltip>

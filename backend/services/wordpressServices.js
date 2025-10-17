@@ -97,27 +97,47 @@ const saveSponsors = async (sponsors) => {
   }
 };
 
-const saveDogSponsor = async (
+const saveSponsor = async ({ name, email }) => {
+  if (!email) {
+    throw new AppError("No se proporcionó un email.", 500);
+  }
+  if (!name) {
+    throw new AppError("No se proporcionó un nombre.", 500);
+  }
+
+  let sqlQuery = `
+    INSERT INTO wp_custom_sponsors (name, email, created_at, updated_at)
+    VALUES (?, ?, NOW(), NOW())
+  `;
+
+  const values = [name, email];
+
+  try {
+    return config.db.query(sqlQuery, values);
+  } catch (error) {
+    console.error("Error al guardar el nuevo padrino:", error);
+    throw new AppError(
+      "Error en la capa de servicio al guardar un padrino.",
+      500
+    );
+  }
+};
+
+const saveDogSponsor = async ({
   dog_id,
   sponsor_id,
-  start_date,
   end_date,
   source,
-  is_active
-) => {
-  // Source = {
-  //   0: custom;
-  //   1: paypal;
-  // }
+  is_active,
+}) => {
   const sqlQuery = `
-    INSERT INTO wp_custom_dog_sponsors (dog_id, sponsor_id, start_date, end_date, source, is_active, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
+    INSERT INTO wp_custom_dog_sponsors (dog_id, sponsor_id, end_date, source, is_active, start_date, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, NOW(), NOW(), NOW())
   `;
   try {
-    await config.db.query(sqlQuery, [
+    return await config.db.query(sqlQuery, [
       dog_id,
       sponsor_id,
-      start_date,
       end_date,
       source,
       is_active,
@@ -126,6 +146,21 @@ const saveDogSponsor = async (
     console.error("Error al guardar la relación padrino-perro:", error);
     throw new AppError(
       "Error en la capa de servicio al guardar la relación padrino-perro.",
+      500
+    );
+  }
+};
+
+const deleteDogSponsor = async ({ dogSponsorId }) => {
+  const sqlQuery = `
+    DELETE FROM wp_custom_dog_sponsors where id = ?
+  `;
+  try {
+    return await config.db.query(sqlQuery, [dogSponsorId]);
+  } catch (error) {
+    console.error("Error al borrar la relación padrino-perro:", error);
+    throw new AppError(
+      "Error en la capa de servicio al borrar la relación padrino-perro.",
       500
     );
   }
@@ -158,7 +193,9 @@ const getAllSponsors = async () => {
 export default {
   fetchAllDogs,
   saveSponsors,
+  saveSponsor,
   saveDogSponsor,
   fetchSponsorsByDogsIds,
+  deleteDogSponsor,
   getAllSponsors,
 };

@@ -19,6 +19,7 @@ const SponsorForm = () => {
     isEditMode,
     emailInputValue,
     sponsorForm,
+    loading,
     setFormData,
     handleSubmit,
     handleClose,
@@ -33,6 +34,7 @@ const SponsorForm = () => {
           <IconButton
             aria-label="close"
             onClick={handleClose}
+            disabled={loading}
             sx={{
               position: "absolute",
               right: 8,
@@ -48,6 +50,7 @@ const SponsorForm = () => {
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <TextField
               margin="normal"
+              disabled={loading}
               required
               fullWidth
               id="name"
@@ -84,6 +87,7 @@ const SponsorForm = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
+                  disabled={loading}
                   margin="normal"
                   required
                   fullWidth
@@ -97,10 +101,10 @@ const SponsorForm = () => {
               )}
             />
             <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
-              <Button onClick={handleClose} sx={{ mr: 1 }}>
+              <Button disabled={loading} onClick={handleClose} sx={{ mr: 1 }}>
                 Cancelar
               </Button>
-              <Button type="submit" variant="contained">
+              <Button loading={loading} type="submit" variant="contained">
                 {isEditMode ? "Guardar Cambios" : "Añadir Sponsor"}
               </Button>
             </Box>

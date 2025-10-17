@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import { useDogsContext } from "../context/useDogsContext";
 import { useUIContext } from "../context/useUIContext";
+import { useSnackbar } from "../context/useSnackbar";
+import useAxios from "../useAxios";
 
-// Crea el useSponsorForm hook teniendo en cuenta lo que hay y podríamos meter desde SponsorForm.jsx
 const useSponsorForm = () => {
-  const { onDogProfile, sponsors } = useDogsContext();
+  const { profileDog, allSponsors, setAllDogs, allDogs } = useDogsContext();
   const { sponsorForm, closeSponsorForm } = useUIContext();
+  const { error, loading: loadingAxios, post } = useAxios();
+  const { showSnackbar } = useSnackbar();
+
   const [formData, setFormData] = useState({ name: "", email: "" });
   const [errors, setErrors] = useState({ name: "", email: "" });
   const [isEditMode, setIsEditMode] = useState(false);
   const [emailInputValue, setEmailInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const profileDogSponsors = onDogProfile?.sponsors || [];
+  const profileDogSponsors = profileDog?.sponsors || [];
+
+  useEffect(() => {
+    setLoading(loadingAxios);
+  }, [loadingAxios]);
 
   useEffect(() => {
     setIsEditMode(sponsorForm.sponsor !== null);
@@ -33,6 +42,13 @@ const useSponsorForm = () => {
     }
   }, [sponsorForm.isOpen, sponsorForm.sponsor, isEditMode]);
 
+  useEffect(() => {
+    if (error) {
+      showSnackbar(error.message, "error");
+      console.error("Error:", error);
+    }
+  }, [error, showSnackbar]);
+
   const validate = () => {
     const newErrors = { name: "", email: "" };
     let isValid = true;
@@ -47,7 +63,7 @@ const useSponsorForm = () => {
       newErrors.email = "Por favor, introduce un email válido.";
       isValid = false;
     } else {
-      const isEmailTaken = sponsors.some(
+      const isEmailTaken = allSponsors.some(
         (sponsor) =>
           sponsor.email.toLowerCase() === formData.email.toLowerCase() &&
           (isEditMode ? sponsor.id !== sponsorForm.sponsor.id : true)
@@ -62,7 +78,7 @@ const useSponsorForm = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
       if (isEditMode) {
@@ -71,19 +87,44 @@ const useSponsorForm = () => {
           ...formData,
         });
       } else {
-        console.log("Adding new sponsor:", formData);
+        const { name, email } = formData;
+        const { id: dog_id } = profileDog;
+
+        const response = await post("/wordpress/save-sponsor-and-dog-sponsor", {
+          name,
+          email,
+          dog_id,
+        });
+
+        if (response.ok) {
+          const { newSponsor } = response;
+          setAllDogs(
+            allDogs.map((dog) => {
+              if (dog.id === profileDog.id) {
+                return {
+                  ...dog,
+                  sponsors: [...dog.sponsors, newSponsor],
+                };
+              }
+
+              return dog;
+            })
+          );
+          // TODO: también debes actualizar el allSponsors
+          showSnackbar(response.message, "success");
+        }
       }
       closeSponsorForm();
     }
   };
 
   const handleClose = () => {
-    closeSponsorForm();
+    !loading && closeSponsorForm();
   };
 
   const filterExistingSponsors = () => {
     return emailInputValue?.length > 5
-      ? sponsors.filter(
+      ? allSponsors.filter(
           (sponsor) =>
             sponsor.email
               .toLowerCase()
@@ -101,6 +142,7 @@ const useSponsorForm = () => {
     isEditMode,
     emailInputValue,
     profileDogSponsors,
+    loading,
     sponsorForm,
     setFormData,
     validate,

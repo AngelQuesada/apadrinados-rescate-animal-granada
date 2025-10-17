@@ -3,7 +3,7 @@ import DogCard from "../DogCard/DogCard";
 import { useDogsContext } from "../../hooks/context/useDogsContext";
 
 const DogsGrid = () => {
-  const { dogs } = useDogsContext();
+  const { allDogs } = useDogsContext();
 
   const dogsWithSponsors = [];
   const dogsWithoutSponsorsPublished = [];
@@ -16,8 +16,8 @@ const DogsGrid = () => {
     },
   };
 
-  if (dogs) {
-    dogs.forEach((dog) => {
+  if (allDogs) {
+    allDogs.forEach((dog) => {
       if (dog.status !== "publish") {
         dogsNotPublished.push(dog);
       } else if (dog.sponsors && dog.sponsors.length > 0) {

@@ -3,7 +3,9 @@ import { DogsContext } from "./dogs-context-definition";
 import useAxios from "../hooks/useAxios";
 
 export const DogsProvider = ({ children }) => {
-  const [onDogProfile, setOnDogProfile] = useState(false);
+  const [profileDog, setProfileDog] = useState(false);
+  const [allDogs, setAllDogs] = useState([]);
+  const [allSponsors, setAllSponsors] = useState([]);
 
   const {
     data: dogsData,
@@ -19,7 +21,14 @@ export const DogsProvider = ({ children }) => {
     get: getSponsors,
   } = useAxios();
 
-  // Realizamos las peticiones iniciales una sola vez
+  const error = dogsError || sponsorsError;
+
+  useEffect(() => {
+    if (error) {
+      console.error("Error:", error);
+    }
+  }, [error]);
+
   useEffect(() => {
     const fetchDogsData = async () => {
       try {
@@ -44,24 +53,26 @@ export const DogsProvider = ({ children }) => {
     fetchSponsorsData();
   }, [getSponsors]);
 
-  const error = dogsError || sponsorsError;
+  useEffect(() => {
+    setAllDogs(dogsData?.dogs || []);
+  }, [dogsData, setAllDogs]);
 
   useEffect(() => {
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [error]);
+    setAllSponsors(sponsorsData?.sponsors || []);
+  }, [sponsorsData, setAllSponsors]);
 
   const contextValue = useMemo(
     () => ({
-      dogs: dogsData?.dogs || [],
-      sponsors: sponsorsData?.sponsors || [],
+      allDogs: allDogs || [],
+      allSponsors: allSponsors || [],
       loading: dogsLoading || sponsorsLoading,
       error: error,
-      onDogProfile,
-      setOnDogProfile,
+      profileDog,
+      setProfileDog,
+      setAllDogs,
+      setAllSponsors,
     }),
-    [dogsData, sponsorsData, dogsLoading, sponsorsLoading, error, onDogProfile]
+    [dogsLoading, sponsorsLoading, error, profileDog, allDogs, allSponsors]
   );
 
   return (
