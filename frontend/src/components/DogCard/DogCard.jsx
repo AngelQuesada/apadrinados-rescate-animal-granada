@@ -9,10 +9,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import { ContentCopy, FormatListBulleted } from "@mui/icons-material";
-import { useUIContext } from "../../hooks/context/useUIContext";
 import { Link } from "react-router-dom";
+import { useUIContext } from "../../hooks/context/useUIContext";
+import { useSnackbar } from "../../hooks/context/useSnackbar";
 
 const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
+  const { showSnackbar } = useSnackbar();
   const sponsorCount = sponsors ? sponsors.length : 0;
   const isPublished = status === "publish";
   const { setImagePopupOpen, setImageUrlForPopup } = useUIContext();
@@ -31,6 +33,14 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
   const openPopupImage = () => {
     setImageUrlForPopup(imageUrl);
     setImagePopupOpen(true);
+  };
+
+  const handleCopyEmails = () => {
+    if (sponsors && sponsors.length > 0) {
+      const emails = sponsors.map((sponsor) => sponsor.email).join(", ");
+      navigator.clipboard.writeText(emails);
+      showSnackbar("Emails copiados al portapapeles", "success");
+    }
   };
 
   return (
@@ -73,7 +83,11 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
               </Link>
             </Tooltip>
             <Tooltip title="Copiar lista">
-              <IconButton sx={buttonStyles}>
+              <IconButton
+                sx={buttonStyles}
+                onClick={handleCopyEmails}
+                disabled={sponsorCount === 0}
+              >
                 <ContentCopy />
               </IconButton>
             </Tooltip>
