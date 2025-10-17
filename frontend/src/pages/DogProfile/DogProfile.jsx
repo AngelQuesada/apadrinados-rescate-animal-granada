@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Badge,
   Checkbox,
   CircularProgress,
   IconButton,
@@ -14,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Edit, Delete, Add } from "@mui/icons-material";
+import { Edit, Delete, Add, Group } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "../../hooks/components/useDogProfile";
@@ -59,12 +60,33 @@ const DogProfile = () => {
   return (
     <Box sx={{ p: 3, pb: `${bottomPadding}px` }}>
       <Paper sx={{ p: 3, mb: 3, display: "flex", alignItems: "center" }}>
-        <Avatar
-          src={imageUrl}
-          alt={name}
-          sx={{ width: 120, height: 120, mr: 3 }}
-        />
-        <Box>
+        <Badge
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          badgeContent={
+            <Tooltip title="Número de padrinos">
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  bgcolor: "primary.main",
+                  color: "white",
+                  p: "4px 10px",
+                  borderRadius: "16px",
+                  border: "2px solid white",
+                }}
+              >
+                <Group sx={{ fontSize: 18, mr: 0.5 }} />
+                <Typography variant="body1">
+                  {dogSponsors?.length || 0}
+                </Typography>
+              </Box>
+            </Tooltip>
+          }
+        >
+          <Avatar src={imageUrl} alt={name} sx={{ width: 120, height: 120 }} />
+        </Badge>
+        <Box sx={{ ml: 3 }}>
           <Typography variant="h3">{name}</Typography>
           <Typography variant="caption">
             Modificado: {new Date(modified).toLocaleDateString()}
