@@ -15,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Edit, Delete, Add, Group } from "@mui/icons-material";
+import { Edit, Delete, Add, Group, ContentCopy } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "../../hooks/components/useDogProfile";
@@ -35,6 +35,7 @@ const DogProfile = () => {
     handleSelectSponsor,
     handleOpenSponsorForm,
     handleDeleteSelection,
+    handleCopySponsorEmails,
     handleDeleteSponsor,
     openSponsorForm,
     loading,
@@ -233,6 +234,16 @@ const DogProfile = () => {
                 disabled={selectedSponsors.length === 0}
               >
                 <Delete />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title="Copiar emails">
+            <span>
+              <IconButton
+                onClick={handleCopySponsorEmails}
+                disabled={!dogSponsors || dogSponsors.length === 0}
+              >
+                <ContentCopy />
               </IconButton>
             </span>
           </Tooltip>

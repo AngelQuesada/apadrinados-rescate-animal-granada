@@ -73,6 +73,14 @@ const useDogProfile = () => {
     showSnackbar("No implementado aún", "warning");
   };
 
+  const handleCopySponsorEmails = () => {
+    if (dogSponsors && dogSponsors.length > 0) {
+      const emails = dogSponsors.map((sponsor) => sponsor.email).join(", ");
+      navigator.clipboard.writeText(emails);
+      showSnackbar("Emails copiados al portapapeles", "success");
+    }
+  };
+
   const handleDeleteSponsor = async (dogSponsorId) => {
     setLoadingDogProfile(true);
     setSelectedSponsor(dogSponsorId);
@@ -119,6 +127,7 @@ const useDogProfile = () => {
     handleSelectSponsor,
     handleOpenSponsorForm,
     handleDeleteSelection,
+    handleCopySponsorEmails,
     handleDeleteSponsor,
     setSelectedSponsor,
   };
