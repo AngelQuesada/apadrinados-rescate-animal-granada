@@ -28,7 +28,7 @@ const DogProfile = () => {
     dogSponsors,
     modified,
     menuRef,
-    loading,
+    loadingDogContext,
     selectedSponsors,
     bottomPadding,
     selectedSponsor,
@@ -37,11 +37,11 @@ const DogProfile = () => {
     handleDeleteSelection,
     handleDeleteSponsor,
     openSponsorForm,
-    loadingDeleteDogSponsor,
+    loading,
   } = useDogProfile();
 
   // TODO: Tenemos nuestro propio componente de carga
-  if (loading) {
+  if (loadingDogContext) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <CircularProgress />
@@ -188,7 +188,7 @@ const DogProfile = () => {
                       <span>
                         <IconButton
                           loading={
-                            loadingDeleteDogSponsor &&
+                            loading &&
                             selectedSponsor === sponsor.dog_sponsor_id
                           }
                           onClick={() => {

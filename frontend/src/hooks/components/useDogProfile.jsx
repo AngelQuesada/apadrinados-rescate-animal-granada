@@ -9,12 +9,13 @@ const useDogProfile = () => {
   const [bottomPadding, setBottomPadding] = useState(0);
   const [selectedSponsors, setSelectedSponsors] = useState([]);
   const [selectedSponsor, setSelectedSponsor] = useState(null);
+  const [loadingDogProfile, setLoadingDogProfile] = useState(false);
 
   const {
     allDogs,
     setAllDogs,
     allSponsors,
-    loading,
+    loading: loadingDogContext,
     setProfileDog,
     profileDog,
   } = useDogsContext();
@@ -73,6 +74,7 @@ const useDogProfile = () => {
   };
 
   const handleDeleteSponsor = async (dogSponsorId) => {
+    setLoadingDogProfile(true);
     setSelectedSponsor(dogSponsorId);
     const response = await del(`/wordpress/delete-dog-sponsor/${dogSponsorId}`);
     if (response.ok) {
@@ -91,15 +93,18 @@ const useDogProfile = () => {
       );
       showSnackbar(response.message, "success");
     }
+    setLoadingDogProfile(false);
   };
+
+  const loading = loadingDogProfile || loadingDogContext;
 
   return {
     loading,
+    loadingDogContext,
+    loadingDogProfile,
     bottomPadding,
     selectedSponsors,
-    setSelectedSponsors,
     selectedSponsor,
-    setSelectedSponsor,
     profileDog,
     name,
     imageUrl,
@@ -109,11 +114,13 @@ const useDogProfile = () => {
     showSnackbar,
     openSponsorForm,
     setAllDogs,
+    error,
+    setSelectedSponsors,
     handleSelectSponsor,
     handleOpenSponsorForm,
     handleDeleteSelection,
     handleDeleteSponsor,
-    error,
+    setSelectedSponsor,
   };
 };
 
