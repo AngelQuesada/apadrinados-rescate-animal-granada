@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDogsContext } from "../context/useDogsContext";
 import { useParams } from "react-router-dom";
 import { useSnackbar } from "../context/useSnackbar";
@@ -6,7 +6,6 @@ import { useUIContext } from "../context/useUIContext";
 import useAxios from "../useAxios";
 
 const useDogProfile = () => {
-  const [bottomPadding, setBottomPadding] = useState(0);
   const [selectedSponsors, setSelectedSponsors] = useState([]);
   const [selectedSponsor, setSelectedSponsor] = useState(null);
   const [loadingDogProfile, setLoadingDogProfile] = useState(false);
@@ -26,8 +25,6 @@ const useDogProfile = () => {
 
   const { error, del } = useAxios();
 
-  const menuRef = useRef(null);
-
   const { id } = useParams();
 
   const dog = useMemo(
@@ -40,12 +37,6 @@ const useDogProfile = () => {
   useEffect(() => {
     setProfileDog(dog);
   }, [dog, setProfileDog]);
-
-  useEffect(() => {
-    if (menuRef.current) {
-      setBottomPadding(menuRef.current.offsetHeight + 10);
-    }
-  }, [dogSponsors]);
 
   useEffect(() => {
     if (error) {
@@ -110,7 +101,6 @@ const useDogProfile = () => {
     loading,
     loadingDogContext,
     loadingDogProfile,
-    bottomPadding,
     selectedSponsors,
     selectedSponsor,
     profileDog,

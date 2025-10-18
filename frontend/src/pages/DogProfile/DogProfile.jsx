@@ -30,7 +30,6 @@ const DogProfile = () => {
     menuRef,
     loadingDogContext,
     selectedSponsors,
-    bottomPadding,
     selectedSponsor,
     handleSelectSponsor,
     handleOpenSponsorForm,
@@ -59,7 +58,8 @@ const DogProfile = () => {
   }
 
   return (
-    <Box sx={{ p: 3, pb: `${bottomPadding}px` }}>
+    <Box sx={{ p: 3, pb: 1 }}>
+      {/* <Box sx={{ p: 3, pb: `${bottomPadding}px` }}> */}
       <Paper sx={{ p: 3, mb: 3, display: "flex", alignItems: "center" }}>
         <Badge
           overlap="circular"
@@ -210,7 +210,15 @@ const DogProfile = () => {
       </TableContainer>
 
       {/* Menu Flotante */}
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+      <Box
+        sx={{
+          position: "sticky",
+          bottom: 30,
+          display: "flex",
+          justifyContent: "center",
+          zIndex: 1,
+        }}
+      >
         <Paper
           ref={menuRef}
           elevation={3}
@@ -218,8 +226,8 @@ const DogProfile = () => {
             display: "flex",
             gap: 2,
             p: 1,
+            mt: 3,
             borderRadius: "16px",
-            mb: "5px",
           }}
         >
           <Tooltip title="Añadir Padrino">
