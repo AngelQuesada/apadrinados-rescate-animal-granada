@@ -1,6 +1,7 @@
 import {
   Avatar,
   Badge,
+  Box,
   Card,
   CardActions,
   CardHeader,
@@ -9,15 +10,17 @@ import {
   Tooltip,
 } from "@mui/material";
 import { ContentCopy, Pets } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-import { useUIContext } from "../../hooks/context/useUIContext";
-import { useSnackbar } from "../../hooks/context/useSnackbar";
+import { useNavigate } from "react-router-dom";
+import { useUIContext } from "#hooks/context/useUIContext";
+import { useSnackbar } from "#hooks/context/useSnackbar";
 
 const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
   const { showSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const { setImagePopupOpen, setImageUrlForPopup } = useUIContext();
+
   const sponsorCount = sponsors ? sponsors.length : 0;
   const isPublished = status === "publish";
-  const { setImagePopupOpen, setImageUrlForPopup } = useUIContext();
 
   const buttonStyles = {
     bgcolor: "secondary.main",
@@ -43,8 +46,18 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
     }
   };
 
+  const handleClickProfile = () => {
+    navigate(`/dog-profile/${id}`);
+  };
+
   return (
-    <Card className="dog-card" sx={{ opacity: isPublished ? 1 : 0.6 }}>
+    <Card
+      className="dog-card"
+      sx={{
+        opacity: isPublished ? 1 : 0.6,
+        width: "auto",
+      }}
+    >
       <CardHeader
         avatar={
           <Badge
@@ -57,7 +70,11 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
               onClick={openPopupImage}
               src={imageUrl}
               alt={name}
-              sx={{ width: 72, height: 72, cursor: "pointer" }}
+              sx={{
+                width: 72,
+                height: 72,
+                cursor: "pointer",
+              }}
             />
           </Badge>
         }
@@ -72,24 +89,21 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
         <>
           <Divider variant="middle" />
           <CardActions sx={{ justifyContent: "center" }}>
-            <Tooltip title="Ir al perfil">
-              <Link
-                to={`/dog-profile/${id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <IconButton sx={buttonStyles}>
-                  <Pets />
-                </IconButton>
-              </Link>
-            </Tooltip>
-            <Tooltip title="Copiar lista">
-              <IconButton
-                sx={buttonStyles}
-                onClick={handleCopyEmails}
-                disabled={sponsorCount === 0}
-              >
-                <ContentCopy />
+            <Tooltip title="Ver lista">
+              <IconButton onClick={handleClickProfile} sx={buttonStyles}>
+                <Pets />
               </IconButton>
+            </Tooltip>
+            <Tooltip title="Copiar todos los emails">
+              <Box component="span">
+                <IconButton
+                  sx={buttonStyles}
+                  onClick={handleCopyEmails}
+                  disabled={sponsorCount === 0}
+                >
+                  <ContentCopy />
+                </IconButton>
+              </Box>
             </Tooltip>
           </CardActions>
         </>

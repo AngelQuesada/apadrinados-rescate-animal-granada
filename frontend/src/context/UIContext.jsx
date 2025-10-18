@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { UIContext } from "./UI-context-definition";
+import { UIContext } from "#context/UI-context-definition";
 
 export const UIProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [imagePopupOpen, setImagePopupOpen] = useState(false);
   const [imageUrlForPopup, setImageUrlForPopup] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [sponsorForm, setSponsorForm] = useState({
     isOpen: false,
     sponsor: null,
@@ -27,6 +28,8 @@ export const UIProvider = ({ children }) => {
         setImagePopupOpen,
         imageUrlForPopup,
         setImageUrlForPopup,
+        isSearchOpen,
+        setIsSearchOpen,
         sponsorForm,
         openSponsorForm,
         closeSponsorForm,

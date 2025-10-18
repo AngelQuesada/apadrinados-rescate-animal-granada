@@ -13,7 +13,9 @@
   "imports": {
     "#components/*": "./components/*",
     "#context/*": "./context/*",
-    "#hooks/*": "./hooks/*"
+    "#hooks/*": "./hooks/*",
+    "#pages/*": "./pages/*",
+    "#utils/*": "./utils/*"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Typography } from "@mui/material";
-import DogCard from "../DogCard/DogCard";
-import { useDogsContext } from "../../hooks/context/useDogsContext";
+import DogCard from "#components/DogCard/DogCard";
+import { useDogsContext } from "#hooks/context/useDogsContext";
 
 const DogsGrid = () => {
   const { allDogs } = useDogsContext();
@@ -47,7 +47,7 @@ const DogsGrid = () => {
             Apadrinados
           </Typography>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={2} justifyContent="center">
+          <Grid container spacing={2} justifyContent="left">
             {dogsWithSponsors.map(renderDog)}
           </Grid>
         </>
@@ -59,7 +59,7 @@ const DogsGrid = () => {
             Sin apadrinar
           </Typography>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={2} justifyContent="center">
+          <Grid container spacing={2} justifyContent="left">
             {dogsWithoutSponsorsPublished.map(renderDog)}
           </Grid>
         </>
@@ -71,7 +71,7 @@ const DogsGrid = () => {
             No disponibles
           </Typography>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={2} justifyContent="center">
+          <Grid container spacing={2} justifyContent="left">
             {dogsNotPublished.map(renderDog)}
           </Grid>
         </>

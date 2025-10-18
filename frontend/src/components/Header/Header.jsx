@@ -1,9 +1,16 @@
-import { AppBar, Toolbar, Box, useMediaQuery, useTheme } from "@mui/material";
+import { AppBar, Toolbar, Box, useMediaQuery, useTheme, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Search } from "@mui/icons-material";
+import { useUIContext } from "#hooks/context/useUIContext";
 
 const Header = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { setIsSearchOpen } = useUIContext();
+
+  const handleOpenSearch = () => {
+    setIsSearchOpen(true);
+  };
 
   return (
     <AppBar
@@ -21,6 +28,9 @@ const Header = () => {
             />
           </Link>
         </Box>
+        <IconButton onClick={handleOpenSearch}>
+          <Search />
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
