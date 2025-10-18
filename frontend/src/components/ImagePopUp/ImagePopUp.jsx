@@ -1,7 +1,7 @@
 import { alpha, Box, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
-import { useUIContext } from "../../hooks/context/useUIContext";
+import { useUIContext } from "#hooks/context/useUIContext";
 import theme from "../../theme/theme";
 
 const ImagePopup = () => {

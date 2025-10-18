@@ -18,7 +18,7 @@ import {
 import { Edit, Delete, Add, Group, ContentCopy } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
-import useDogProfile from "../../hooks/components/useDogProfile";
+import useDogProfile from "#hooks/components/useDogProfile";
 
 const DogProfile = () => {
   const {

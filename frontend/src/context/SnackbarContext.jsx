@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Snackbar, Alert, Slide } from "@mui/material";
-import { SnackbarContext } from "./snackbar-context-definition";
+import { SnackbarContext } from "#context/snackbar-context-definition";
 
 function TransitionSlide(props) {
   return <Slide {...props} direction="up" />;

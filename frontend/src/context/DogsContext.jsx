@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { DogsContext } from "./dogs-context-definition";
-import useAxios from "../hooks/useAxios";
+import { DogsContext } from "#context/dogs-context-definition";
+import useAxios from "#hooks/useAxios";
 
 export const DogsProvider = ({ children }) => {
   const [profileDog, setProfileDog] = useState(false);

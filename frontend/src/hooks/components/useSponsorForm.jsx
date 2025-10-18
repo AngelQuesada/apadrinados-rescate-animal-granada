@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDogsContext } from "../context/useDogsContext";
-import { useUIContext } from "../context/useUIContext";
-import { useSnackbar } from "../context/useSnackbar";
-import useAxios from "../useAxios";
+import { useDogsContext } from "#hooks/context/useDogsContext";
+import { useUIContext } from "#hooks/context/useUIContext";
+import { useSnackbar } from "#hooks/context/useSnackbar";
+import useAxios from "#hooks/useAxios";
 
 const useSponsorForm = () => {
   const { profileDog, allSponsors, setAllDogs, allDogs } = useDogsContext();

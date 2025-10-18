@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useUIContext } from "../../hooks/context/useUIContext";
+import { useUIContext } from "#hooks/context/useUIContext";
 
 const LoadingScreen = () => {
   const { loading } = useUIContext();

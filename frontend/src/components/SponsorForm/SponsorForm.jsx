@@ -9,8 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { modalStyle } from "./sponsorFormStyles";
-import useSponsorForm from "../../hooks/components/useSponsorForm";
+import { modalStyle } from "#components/SponsorForm/sponsorFormStyles";
+import useSponsorForm from "#hooks/components/useSponsorForm";
 
 const SponsorForm = () => {
   const {

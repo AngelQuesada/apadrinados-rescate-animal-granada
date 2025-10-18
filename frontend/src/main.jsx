@@ -2,9 +2,9 @@ import { StrictMode } from "react";
 import { BrowserRouter } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import { DogsProvider } from "./context/DogsContext.jsx";
-import { UIProvider } from "./context/UIContext.jsx";
-import { SnackbarProvider } from "./context/SnackbarContext.jsx";
+import { DogsProvider } from "#context/DogsContext.jsx";
+import { UIProvider } from "#context/UIContext.jsx";
+import { SnackbarProvider } from "#context/SnackbarContext.jsx";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme/theme.js";
 

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useDogsContext } from "../context/useDogsContext";
+import { useDogsContext } from "#hooks/context/useDogsContext";
 import { useParams } from "react-router-dom";
-import { useSnackbar } from "../context/useSnackbar";
-import { useUIContext } from "../context/useUIContext";
-import useAxios from "../useAxios";
+import { useSnackbar } from "#hooks/context/useSnackbar";
+import { useUIContext } from "#hooks/context/useUIContext";
+import useAxios from "#hooks/useAxios";
 
 const useDogProfile = () => {
   const [selectedSponsors, setSelectedSponsors] = useState([]);

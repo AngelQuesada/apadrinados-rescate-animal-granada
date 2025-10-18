@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DogsContext } from "../../context/dogs-context-definition";
+import { DogsContext } from "#context/dogs-context-definition";
 
 export const useDogsContext = () => {
   const context = useContext(DogsContext);
