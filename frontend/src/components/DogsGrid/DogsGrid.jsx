@@ -10,10 +10,11 @@ const DogsGrid = () => {
   const dogsNotPublished = [];
 
   const gridStyles = {
-    width: {
-      xs: "100%",
-      sm: "100%",
-      md: "auto",
+    size: {
+      xs: 12,
+      sm: 12,
+      md: 4,
+      lg: 3,
     },
   };
 
@@ -31,8 +32,8 @@ const DogsGrid = () => {
 
   const renderDog = (dog) => (
     <Grid
+      {...gridStyles}
       className="grid-dog-card"
-      sx={gridStyles}
       item
       xs={12}
       sm={6}
@@ -65,7 +66,7 @@ const DogsGrid = () => {
         <>
           <Title>Apadrinados</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={4} justifyContent="center">
+          <Grid container spacing={4}>
             {dogsWithSponsors.map(renderDog)}
           </Grid>
         </>
