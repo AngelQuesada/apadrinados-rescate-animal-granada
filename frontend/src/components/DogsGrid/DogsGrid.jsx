@@ -12,7 +12,8 @@ const DogsGrid = () => {
   const gridStyles = {
     width: {
       xs: "100%",
-      sm: "auto",
+      sm: "100%",
+      md: "auto",
     },
   };
 
