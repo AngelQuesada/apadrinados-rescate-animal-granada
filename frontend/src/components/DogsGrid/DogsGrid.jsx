@@ -31,15 +31,7 @@ const DogsGrid = () => {
   }
 
   const renderDog = (dog) => (
-    <Grid
-      {...gridStyles}
-      className="grid-dog-card"
-      item
-      xs={12}
-      sm={6}
-      md={4}
-      key={dog.id}
-    >
+    <Grid {...gridStyles} className="grid-dog-card" key={dog.id}>
       <DogCard {...dog} />
     </Grid>
   );
