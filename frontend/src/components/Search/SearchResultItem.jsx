@@ -25,12 +25,11 @@ const SearchResultItem = ({ name, imageUrl, sponsors, status, id }) => {
   } = useUIContext();
 
   const buttonStyles = {
-    bgcolor: "secondary.main",
-    color: "white",
+    color: "primary.main",
     border: "1px solid transparent",
     "&:hover": {
-      bgcolor: "white",
-      color: "secondary.main",
+      bgcolor: "primary.main",
+      color: "white",
       borderColor: "primary.main",
     },
     transform: "scale(0.8)",
@@ -56,7 +55,22 @@ const SearchResultItem = ({ name, imageUrl, sponsors, status, id }) => {
 
   return (
     <Card
-      sx={{ display: "flex", alignItems: "center", p: 1, width: "100%", my: 1 }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        p: 1,
+        width: "100%",
+        my: 1,
+        borderRadius: "16px",
+        boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255,255,255,0.3)",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-1px)",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
+        },
+      }}
     >
       <Badge
         overlap="circular"

@@ -23,12 +23,11 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
   const isPublished = status === "publish";
 
   const buttonStyles = {
-    bgcolor: "secondary.main",
-    color: "white",
+    color: "primary.main",
     border: "1px solid transparent",
     "&:hover": {
-      bgcolor: "white",
-      color: "secondary.main",
+      bgcolor: "primary.main",
+      color: "white",
       borderColor: "primary.main",
     },
   };
@@ -56,6 +55,15 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
       sx={{
         opacity: isPublished ? 1 : 0.6,
         width: "auto",
+        borderRadius: "16px",
+        boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
+        backdropFilter: "blur(5px)",
+        border: "1px solid rgba(255,255,255,0.3)",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        "&:hover": {
+          transform: "translateY(-3px)",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
+        },
       }}
     >
       <CardHeader
@@ -74,6 +82,7 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
                 width: 72,
                 height: 72,
                 cursor: "pointer",
+                border: "2px solid white",
               }}
             />
           </Badge>
@@ -81,7 +90,7 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
         title={name}
         subheader={`Modificado: ${new Date(modified).toLocaleDateString()}`}
         slotProps={{
-          title: { variant: "h5" },
+          title: { variant: "h5", fontWeight: "bold" },
           subheader: { variant: "caption" },
         }}
       />

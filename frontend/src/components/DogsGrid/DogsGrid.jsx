@@ -32,22 +32,39 @@ const DogsGrid = () => {
     <Grid
       className="grid-dog-card"
       sx={gridStyles}
-      size={{ xs: 12, sm: 12, md: 6 }}
+      item
+      xs={12}
+      sm={6}
+      md={4}
       key={dog.id}
     >
       <DogCard {...dog} />
     </Grid>
   );
 
+  const Title = ({ children }) => (
+    <Typography
+      variant="h4"
+      component="h2"
+      sx={{
+        mt: 6,
+        mb: 1,
+        fontWeight: "bold",
+        color: "text.primary",
+        textAlign: "center",
+      }}
+    >
+      {children}
+    </Typography>
+  );
+
   return (
     <Box>
       {dogsWithSponsors.length > 0 && (
         <>
-          <Typography variant="h5" component="h2" sx={{ mt: 6, mb: 1 }}>
-            Apadrinados
-          </Typography>
+          <Title>Apadrinados</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={2} justifyContent="left">
+          <Grid container spacing={4} justifyContent="center">
             {dogsWithSponsors.map(renderDog)}
           </Grid>
         </>
@@ -55,11 +72,9 @@ const DogsGrid = () => {
 
       {dogsWithoutSponsorsPublished.length > 0 && (
         <>
-          <Typography variant="h5" component="h2" sx={{ mt: 6, mb: 1 }}>
-            Sin apadrinar
-          </Typography>
+          <Title>Sin apadrinar</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={2} justifyContent="left">
+          <Grid container spacing={4} justifyContent="center">
             {dogsWithoutSponsorsPublished.map(renderDog)}
           </Grid>
         </>
@@ -67,11 +82,9 @@ const DogsGrid = () => {
 
       {dogsNotPublished.length > 0 && (
         <>
-          <Typography variant="h5" component="h2" sx={{ mt: 6, mb: 1 }}>
-            No disponibles
-          </Typography>
+          <Title>No disponibles</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={2} justifyContent="left">
+          <Grid container spacing={4} justifyContent="center">
             {dogsNotPublished.map(renderDog)}
           </Grid>
         </>
