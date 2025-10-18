@@ -8,7 +8,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import { ContentCopy, FormatListBulleted } from "@mui/icons-material";
+import { ContentCopy, Pets } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useUIContext } from "../../hooks/context/useUIContext";
 import { useSnackbar } from "../../hooks/context/useSnackbar";
@@ -72,13 +72,13 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
         <>
           <Divider variant="middle" />
           <CardActions sx={{ justifyContent: "center" }}>
-            <Tooltip title="Ver lista">
+            <Tooltip title="Ir al perfil">
               <Link
                 to={`/dog-profile/${id}`}
                 style={{ textDecoration: "none" }}
               >
                 <IconButton sx={buttonStyles}>
-                  <FormatListBulleted />
+                  <Pets />
                 </IconButton>
               </Link>
             </Tooltip>
