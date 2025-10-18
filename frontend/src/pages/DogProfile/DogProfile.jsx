@@ -19,6 +19,7 @@ import { Edit, Delete, Add, Group, ContentCopy } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "#hooks/components/useDogProfile";
+import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
 
 const DogProfile = () => {
   const {
@@ -38,6 +39,9 @@ const DogProfile = () => {
     handleDeleteSponsor,
     openSponsorForm,
     loading,
+    confirmDeleteOpen,
+    setConfirmDeleteOpen,
+    setSelectedSponsor,
   } = useDogProfile();
 
   // TODO: Tenemos nuestro propio componente de carga
@@ -59,7 +63,6 @@ const DogProfile = () => {
 
   return (
     <Box sx={{ p: 3, pb: 1 }}>
-      {/* <Box sx={{ p: 3, pb: `${bottomPadding}px` }}> */}
       <Paper sx={{ p: 3, mb: 3, display: "flex", alignItems: "center" }}>
         <Badge
           overlap="circular"
@@ -193,7 +196,8 @@ const DogProfile = () => {
                             selectedSponsor === sponsor.dog_sponsor_id
                           }
                           onClick={() => {
-                            handleDeleteSponsor(sponsor.dog_sponsor_id);
+                            setSelectedSponsor(sponsor.dog_sponsor_id);
+                            setConfirmDeleteOpen(true);
                           }}
                           disabled={isPaypalSponsor}
                         >
@@ -257,6 +261,14 @@ const DogProfile = () => {
           </Tooltip>
         </Paper>
       </Box>
+
+      <ConfirmDialog
+        title="Confirmar eliminación"
+        content="¿Estás seguro de que deseas eliminar al/los padrinos seleccionado/s?"
+        acceptButtonText="Eliminar"
+        isOpen={confirmDeleteOpen}
+        onAccept={handleDeleteSponsor}
+      />
     </Box>
   );
 };
