@@ -111,14 +111,15 @@ const saveSponsor = async (req, res, next) => {
   }
 };
 
-const deleteDogSponsor = async (req, res, next) => {
+const deleteDogSponsors = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { ids } = req.params;
+    const dogSponsorIds = ids.split(",");
 
-    await wordpressService.deleteDogSponsor({ dogSponsorId: id });
+    await wordpressService.deleteDogSponsors({ dogSponsorIds });
     res.status(200).json({
       ok: true,
-      message: "Relación padrino - perro eliminada con éxito.",
+      message: "Relación(es) padrino - perro eliminada(s) con éxito.",
     });
   } catch (error) {
     next(error);
@@ -203,7 +204,7 @@ const wordpressController = {
   getSponsorsByDogsIds,
   getAllSponsors,
   saveSponsor,
-  deleteDogSponsor,
+  deleteDogSponsors,
 };
 
 export default wordpressController;

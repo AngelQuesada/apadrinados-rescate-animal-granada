@@ -151,12 +151,12 @@ const saveDogSponsor = async ({
   }
 };
 
-const deleteDogSponsor = async ({ dogSponsorId }) => {
+const deleteDogSponsors = async ({ dogSponsorIds }) => {
   const sqlQuery = `
-    DELETE FROM wp_custom_dog_sponsors where id = ?
+    DELETE FROM wp_custom_dog_sponsors where id IN (?)
   `;
   try {
-    return await config.db.query(sqlQuery, [dogSponsorId]);
+    return await config.db.query(sqlQuery, [dogSponsorIds]);
   } catch (error) {
     console.error("Error al borrar la relación padrino-perro:", error);
     throw new AppError(
@@ -196,6 +196,6 @@ export default {
   saveSponsor,
   saveDogSponsor,
   fetchSponsorsByDogsIds,
-  deleteDogSponsor,
+  deleteDogSponsors,
   getAllSponsors,
 };

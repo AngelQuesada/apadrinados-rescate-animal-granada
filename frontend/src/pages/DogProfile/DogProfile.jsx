@@ -34,14 +34,13 @@ const DogProfile = () => {
     selectedSponsor,
     handleSelectSponsor,
     handleOpenSponsorForm,
-    handleDeleteSelection,
     handleCopySponsorEmails,
     handleDeleteSponsor,
     openSponsorForm,
     loading,
     confirmDeleteOpen,
-    setConfirmDeleteOpen,
-    setSelectedSponsor,
+    handleClickDeleteSponsor,
+    handleClickDeleteSponsorSelection,
   } = useDogProfile();
 
   // TODO: Tenemos nuestro propio componente de carga
@@ -196,8 +195,7 @@ const DogProfile = () => {
                             selectedSponsor === sponsor.dog_sponsor_id
                           }
                           onClick={() => {
-                            setSelectedSponsor(sponsor.dog_sponsor_id);
-                            setConfirmDeleteOpen(true);
+                            handleClickDeleteSponsor(sponsor.dog_sponsor_id);
                           }}
                           disabled={isPaypalSponsor}
                         >
@@ -242,7 +240,7 @@ const DogProfile = () => {
           <Tooltip title="Eliminar seleccionados">
             <span>
               <IconButton
-                onClick={handleDeleteSelection}
+                onClick={handleClickDeleteSponsorSelection}
                 disabled={selectedSponsors.length === 0}
               >
                 <Delete />

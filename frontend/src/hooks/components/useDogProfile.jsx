@@ -42,10 +42,11 @@ const useDogProfile = () => {
   useEffect(() => {
     if (error) {
       showSnackbar(error.message, "error");
-      setSelectedSponsor(null);
+      setSelectedSponsors([]);
+      setConfirmDeleteOpen(false);
       console.error("Error:", error);
     }
-  }, [error, showSnackbar, setSelectedSponsor]);
+  }, [error, showSnackbar, setSelectedSponsors]);
 
   const handleSelectSponsor = (sponsorId) => {
     setSelectedSponsors((prevSelected) => {
@@ -61,8 +62,14 @@ const useDogProfile = () => {
     openSponsorForm();
   };
 
-  const handleDeleteSelection = () => {
-    showSnackbar("No implementado aún", "warning");
+  const handleClickDeleteSponsor = (sponsorId) => {
+    setSelectedSponsor(sponsorId);
+    setSelectedSponsors([]);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleClickDeleteSponsorSelection = () => {
+    setConfirmDeleteOpen(true);
   };
 
   const handleCopySponsorEmails = () => {
@@ -76,9 +83,15 @@ const useDogProfile = () => {
   const handleDeleteSponsor = async () => {
     setConfirmDeleteOpen(false);
     setLoadingDogProfile(true);
+
+    const sponsorsToDelete = selectedSponsor
+      ? [selectedSponsor]
+      : selectedSponsors;
+
     const response = await del(
-      `/wordpress/delete-dog-sponsor/${selectedSponsor}`
+      `/wordpress/delete-dog-sponsors/${sponsorsToDelete.join(",")}`
     );
+
     if (response.ok) {
       setAllDogs(
         allDogs.map((dog) => {
@@ -86,7 +99,7 @@ const useDogProfile = () => {
             return {
               ...dog,
               sponsors: dog.sponsors.filter(
-                (sponsor) => sponsor.dog_sponsor_id !== selectedSponsor
+                (sponsor) => !sponsorsToDelete.includes(sponsor.dog_sponsor_id)
               ),
             };
           }
@@ -105,7 +118,6 @@ const useDogProfile = () => {
     loadingDogContext,
     loadingDogProfile,
     selectedSponsors,
-    selectedSponsor,
     profileDog,
     name,
     imageUrl,
@@ -121,10 +133,10 @@ const useDogProfile = () => {
     setSelectedSponsors,
     handleSelectSponsor,
     handleOpenSponsorForm,
-    handleDeleteSelection,
+    handleClickDeleteSponsorSelection,
     handleCopySponsorEmails,
+    handleClickDeleteSponsor,
     handleDeleteSponsor,
-    setSelectedSponsor,
   };
 };
 
