@@ -72,7 +72,17 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
             overlap="circular"
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             badgeContent={sponsorCount}
-            color="secondary"
+            variant="standard"
+            color="primary"
+            sx={{
+              "& .MuiBadge-badge": {
+                fontSize: "1rem",
+                fontWeight: "bold",
+                minWidth: "30px",
+                height: "30px",
+                padding: "0 7px",
+              },
+            }}
           >
             <Avatar
               onClick={openPopupImage}

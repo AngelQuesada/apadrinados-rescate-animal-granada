@@ -131,82 +131,101 @@ const DogProfile = () => {
 
           {/* Body Tabla */}
           <TableBody>
-            {dogSponsors.map((sponsor) => {
-              const isPaypalSponsor = sponsor.source === 1;
-              const isSelected = selectedSponsors.includes(
-                sponsor.dog_sponsor_id
-              );
+            {[...dogSponsors]
+              .sort((a, b) => {
+                const aIsPaypal = a.source === 1;
+                const bIsPaypal = b.source === 1;
 
-              return (
-                <TableRow
-                  key={sponsor.dog_sponsor_id}
-                  sx={{
-                    "& .MuiTableCell-root": {
-                      fontSize: { xs: "0.75rem", md: "1rem" },
-                    },
-                  }}
-                >
-                  {/* Checkbox */}
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      disabled={isPaypalSponsor}
-                      checked={isSelected}
-                      onChange={() =>
-                        handleSelectSponsor(sponsor.dog_sponsor_id)
-                      }
-                    />
-                  </TableCell>
-                  {/* Nombre */}
-                  <TableCell>{sponsor.name}</TableCell>
-                  {/* Email */}
-                  <TableCell>{sponsor.email}</TableCell>
-                  {/* Fecha de Creación */}
-                  <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
-                    {new Date(sponsor.created_at).toLocaleDateString()}
-                  </TableCell>
-                  {/* Origen */}
-                  <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
-                    {isPaypalSponsor && (
-                      <Tooltip title="PayPal">
-                        <FontAwesomeIcon
-                          icon={faPaypal}
-                          style={{ color: "#333333" }}
-                        />
+                // Mover los padrinos de PayPal al final
+                if (aIsPaypal && !bIsPaypal) return 1;
+                if (!aIsPaypal && bIsPaypal) return -1;
+
+                // Ordenar por fecha de creación (más reciente primero)
+                return (
+                  new Date(b.created_at).getTime() -
+                  new Date(a.created_at).getTime()
+                );
+              })
+              .map((sponsor) => {
+                const isPaypalSponsor = sponsor.source === 1;
+                const isSelected = selectedSponsors.includes(
+                  sponsor.dog_sponsor_id
+                );
+
+                return (
+                  <TableRow
+                    key={sponsor.dog_sponsor_id}
+                    sx={{
+                      "& .MuiTableCell-root": {
+                        fontSize: { xs: "0.75rem", md: "1rem" },
+                      },
+                    }}
+                  >
+                    {/* Checkbox */}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        disabled={isPaypalSponsor}
+                        checked={isSelected}
+                        onChange={() =>
+                          handleSelectSponsor(sponsor.dog_sponsor_id)
+                        }
+                      />
+                    </TableCell>
+                    {/* Nombre */}
+                    <TableCell>{sponsor.name}</TableCell>
+                    {/* Email */}
+                    <TableCell>{sponsor.email}</TableCell>
+                    {/* Fecha de Creación */}
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {new Date(sponsor.created_at).toLocaleDateString()}
+                    </TableCell>
+                    {/* Origen */}
+                    <TableCell
+                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                    >
+                      {isPaypalSponsor && (
+                        <Tooltip title="PayPal">
+                          <FontAwesomeIcon
+                            icon={faPaypal}
+                            style={{ color: "#333333" }}
+                          />
+                        </Tooltip>
+                      )}
+                    </TableCell>
+                    {/* Acciones */}
+                    <TableCell>
+                      <Tooltip title="Editar">
+                        <span>
+                          <IconButton
+                            disabled={isPaypalSponsor}
+                            onClick={() => openSponsorForm(sponsor)}
+                          >
+                            <Edit />
+                          </IconButton>
+                        </span>
                       </Tooltip>
-                    )}
-                  </TableCell>
-                  {/* Acciones */}
-                  <TableCell>
-                    <Tooltip title="Editar">
-                      <span>
-                        <IconButton
-                          disabled={isPaypalSponsor}
-                          onClick={() => openSponsorForm(sponsor)}
-                        >
-                          <Edit />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                    <Tooltip title="Eliminar">
-                      <span>
-                        <IconButton
-                          loading={
-                            loading &&
-                            selectedSponsor === sponsor.dog_sponsor_id
-                          }
-                          onClick={() => {
-                            handleClickDeleteSponsor(sponsor.dog_sponsor_id);
-                          }}
-                          disabled={isPaypalSponsor}
-                        >
-                          <Delete />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                      <Tooltip title="Eliminar">
+                        <span>
+                          <IconButton
+                            loading={
+                              loading &&
+                              selectedSponsor === sponsor.dog_sponsor_id
+                            }
+                            onClick={() => {
+                              handleClickDeleteSponsor(sponsor.dog_sponsor_id);
+                            }}
+                            disabled={isPaypalSponsor}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
