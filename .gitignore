@@ -4,5 +4,4 @@
 node_modules
 .gemini/settings.json
 backend/.env.development
-backend/.env.example
 backend/.env.testing
