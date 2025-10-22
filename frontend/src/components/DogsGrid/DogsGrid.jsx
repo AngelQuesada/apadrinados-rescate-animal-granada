@@ -68,7 +68,7 @@ const DogsGrid = () => {
         <>
           <Title>Sin apadrinar</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={4} justifyContent="center">
+          <Grid container spacing={4}>
             {dogsWithoutSponsorsPublished.map(renderDog)}
           </Grid>
         </>
@@ -78,7 +78,7 @@ const DogsGrid = () => {
         <>
           <Title>No disponibles</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={4} justifyContent="center">
+          <Grid container spacing={4}>
             {dogsNotPublished.map(renderDog)}
           </Grid>
         </>
