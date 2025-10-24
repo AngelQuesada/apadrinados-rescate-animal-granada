@@ -3,7 +3,6 @@ import wordpressService from "../services/wordpressServices.js";
 const getStructuredDogsData = async (req, res, next) => {
   try {
     const dogsRawData = await wordpressService.fetchAllDogs();
-
     let dogsData = [];
     if (dogsRawData && Array.isArray(dogsRawData)) {
       dogsData = dogsRawData.map((perro) => ({

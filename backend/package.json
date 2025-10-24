@@ -15,8 +15,20 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon app.js",
-    "db:seed": "node ./db/seed.js"
+    "start:dev": "dotenv -e .env.development -- nodemon app.js",
+    "start:dev:env": "dotenv -e .env.development -- nodemon app.js",
+    "start:prod": "node app.js",
+    "db:seed": "node ./db/seed.js",
+    "db:seed:dev": "dotenv -e .env.development -- node ./db/seed.js",
+    "db:seed:test": "dotenv -e .env.testing -- node ./db/seed.js",
+    "db:migrate:dev": "dotenv -e .env.development -- knex migrate:latest --env development",
+    "db:migrate:test": "dotenv -e .env.testing -- knex migrate:latest --env testing",
+    "db:migrate:prod": "knex migrate:latest --env production",
+    "db:reset:dev": "pnpm run db:migrate:dev && pnpm run db:seed:dev",
+    "db:reset:test": "pnpm run db:migrate:test && pnpm run db:seed:test",
+    "check:env": "node check-env.js",
+    "check:env:dev": "dotenv -e .env.development -- node check-env.js",
+    "check:env:prod": "dotenv -e .env.production -- node check-env.js"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +42,7 @@
     "mysql2": "^3.14.5"
   },
   "devDependencies": {
+    "dotenv-cli": "^10.0.0",
     "nodemon": "^3.1.10"
   }
 }

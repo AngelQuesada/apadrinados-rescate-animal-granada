@@ -3,7 +3,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { getDbConnection } from "#db/db.js";
 
-// --- Helper para obtener la ruta correcta en módulos ESM ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
