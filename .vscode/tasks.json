@@ -2,29 +2,31 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Start Frontend",
+      "label": "Run Frontend (dev)",
       "type": "shell",
-      "command": "npm run dev",
+      "command": "pnpm run dev",
       "options": {
         "cwd": "${workspaceFolder}/frontend"
       },
-      "presentation": {
-        "external": true
-      },
-      "runOptions": {
-        "runOn": "folderOpen"
-      }
+      "isBackground": true,
+      "problemMatcher": []
     },
     {
-      "label": "Start Backend",
+      "label": "Run Backend (dev)",
       "type": "shell",
       "command": "pnpm run start:dev",
       "options": {
         "cwd": "${workspaceFolder}/backend"
       },
-      "presentation": {
-        "external": true
-      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Run All (dev)",
+      "dependsOn": [
+        "Run Frontend (dev)",
+        "Run Backend (dev)"
+      ],
       "runOptions": {
         "runOn": "folderOpen"
       }
