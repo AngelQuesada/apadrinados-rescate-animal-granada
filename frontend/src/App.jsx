@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { DogsProvider } from "#context/DogsContext";
 import { UIProvider } from "#context/UIContext";
+import { SnackbarProvider } from "#context/SnackbarContext";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import theme from "./theme/theme";
@@ -18,22 +19,24 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <UIProvider>
-        <DogsProvider>
-          <LoadingScreen />
-          <Layout>
-            <Container>
-              <Routes>
-                <Route
-                  path="/"
-                  element={<DogsGrid />}
-                />
-                <Route path="/dog-profile/:id" element={<DogProfile />} />
-              </Routes>
-            </Container>
-          </Layout>
-          <ImagePopup />
-          <SponsorForm />
-        </DogsProvider>
+        <SnackbarProvider>
+          <DogsProvider>
+            <LoadingScreen />
+            <Layout>
+              <Container>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={<DogsGrid />}
+                  />
+                  <Route path="/dog-profile/:id" element={<DogProfile />} />
+                </Routes>
+              </Container>
+            </Layout>
+            <ImagePopup />
+            <SponsorForm />
+          </DogsProvider>
+        </SnackbarProvider>
       </UIProvider>
     </ThemeProvider>
   );

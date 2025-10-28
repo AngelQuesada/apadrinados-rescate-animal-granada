@@ -14,10 +14,9 @@
     "#middlewares/*": "./middlewares/*"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "dotenv -e .env.development -- nodemon app.js",
-    "start:dev:env": "dotenv -e .env.development -- nodemon app.js",
-    "start:prod": "node app.js",
+    "test": "pnpm run db:reset:test && dotenv -e .env.testing -- jest",
+    "start:dev": "dotenv -e .env.development -- nodemon server.js",
+    "start:prod": "node server.js",
     "db:seed": "node ./db/seed.js",
     "db:seed:dev": "dotenv -e .env.development -- node ./db/seed.js",
     "db:seed:test": "dotenv -e .env.testing -- node ./db/seed.js",
@@ -42,7 +41,12 @@
     "mysql2": "^3.14.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "babel-jest": "^30.2.0",
     "dotenv-cli": "^10.0.0",
-    "nodemon": "^3.1.10"
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
   }
 }

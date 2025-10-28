@@ -66,6 +66,7 @@ const SponsorForm = () => {
               helperText={errors.name}
             />
             <Autocomplete
+              disabled={loading}
               freeSolo
               options={filterExistingSponsors()}
               getOptionLabel={(option) =>

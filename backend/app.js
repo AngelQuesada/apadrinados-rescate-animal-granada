@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import config from "./config/index.js";
 import errorHandler from "#middlewares/errorHandler.js";
 
 // Routers
@@ -19,6 +18,4 @@ app.use("/api/paypal", paypalRoutes);
 // Manejador de errores
 app.use(errorHandler);
 
-app.listen(config.port, () => {
-  console.log(`Example app listening on port ${config.port}`);
-});
+export default app;
