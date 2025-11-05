@@ -110,6 +110,20 @@ const saveSponsor = async (req, res, next) => {
   }
 };
 
+const updateSponsor = async (req, res, next) => {
+  try {
+    const { id, name, email } = req.body;
+
+    await wordpressService.updateSponsor({ id, name, email });
+    res.status(200).json({
+      ok: true,
+      message: "Padrino actualizado con éxito.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteDogSponsors = async (req, res, next) => {
   try {
     const { ids } = req.params;
@@ -195,7 +209,7 @@ const getAllSponsors = async (req, res, next) => {
   }
 };
 
-const wordpressController = {
+export default {
   getStructuredDogsData,
   saveSponsors,
   saveDogSponsor,
@@ -204,6 +218,5 @@ const wordpressController = {
   getAllSponsors,
   saveSponsor,
   deleteDogSponsors,
+  updateSponsor,
 };
-
-export default wordpressController;

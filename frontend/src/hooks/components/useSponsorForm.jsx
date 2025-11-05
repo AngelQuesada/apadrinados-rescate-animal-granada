@@ -7,7 +7,7 @@ import useAxios from "#hooks/useAxios";
 const useSponsorForm = () => {
   const { profileDog, allSponsors, setAllDogs, allDogs } = useDogsContext();
   const { sponsorForm, closeSponsorForm } = useUIContext();
-  const { error, loading: loadingAxios, post } = useAxios();
+  const { error, loading: loadingAxios, post, put } = useAxios();
   const { showSnackbar } = useSnackbar();
 
   const [formData, setFormData] = useState({ name: "", email: "" });
@@ -81,42 +81,61 @@ const useSponsorForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      if (isEditMode) {
-        console.log("Updating sponsor:", {
-          ...sponsorForm.sponsor,
-          ...formData,
-        });
-      } else {
         const { name, email } = formData;
-        const { id: dog_id } = profileDog;
 
-        const response = await post("/wordpress/save-sponsor-and-dog-sponsor", {
-          name,
-          email,
-          dog_id,
-        });
+        const response = isEditMode
+          ? await submitEditSponsor(name, email)
+          : await submitSponsorAndDogSponsor(name, email);
 
         if (response.ok) {
-          const { newSponsor } = response;
           setAllDogs(
             allDogs.map((dog) => {
               if (dog.id === profileDog.id) {
-                return {
-                  ...dog,
-                  sponsors: [...dog.sponsors, newSponsor],
-                };
+                if (isEditMode) {
+                  return {
+                    ...dog,
+                    sponsors: dog.sponsors.map((sponsor) => {
+                      if (sponsor.id === sponsorForm.sponsor.id) {
+                        return {
+                          ...sponsor,
+                          name,
+                          email,
+                        };
+                      } else {
+                        return sponsor;
+                      }
+                    }
+                    ),
+                  };
+                } else {
+                  const { newSponsor } = response;
+
+                  return {
+                    ...dog,
+                    sponsors: [...dog.sponsors, newSponsor],
+                  };
+                }
               }
 
               return dog;
             })
           );
-          // TODO: también debes actualizar el allSponsors
+          // TODO: Cambiar también en allSponsors
           showSnackbar(response.message, "success");
         }
-      }
       closeSponsorForm();
     }
   };
+
+  const submitSponsorAndDogSponsor = async (name, email) => {
+    const { id: dog_id } = profileDog;
+    return await post("/wordpress/save-sponsor-and-dog-sponsor", {name, email, dog_id});
+  }
+
+  const submitEditSponsor = async (name, email) => {
+    const { id } = sponsorForm.sponsor;
+    return await put("/wordpress/update-sponsor", {id, name, email});
+  }
 
   const handleClose = () => {
     !loading && closeSponsorForm();

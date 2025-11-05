@@ -14,6 +14,7 @@ router.post(
   "/save-sponsor-and-dog-sponsor",
   wordpressController.saveSponsorAndDogSponsor
 );
+router.put("/update-sponsor", wordpressController.updateSponsor);
 router.delete(
   "/delete-dog-sponsors/:ids",
   wordpressController.deleteDogSponsors

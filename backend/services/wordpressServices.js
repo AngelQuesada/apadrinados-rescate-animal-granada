@@ -151,6 +151,23 @@ const saveDogSponsor = async ({
   }
 };
 
+const updateSponsor = async ({ id, name, email }) => {
+  const sqlQuery = `
+    UPDATE wp_custom_sponsors
+    SET name = ?, email = ?, updated_at = NOW()
+    WHERE id = ?
+  `;
+  try {
+    return await config.db.query(sqlQuery, [name, email, id]);
+  } catch (error) {
+    console.error("Error al actualizar el padrino:", error);
+    throw new AppError(
+      "Error en la capa de servicio al actualizar un padrino.",
+      500
+    );
+  }
+};
+
 const deleteDogSponsors = async ({ dogSponsorIds }) => {
   const sqlQuery = `
     DELETE FROM wp_custom_dog_sponsors where id IN (?)
@@ -198,4 +215,5 @@ export default {
   fetchSponsorsByDogsIds,
   deleteDogSponsors,
   getAllSponsors,
+  updateSponsor
 };
