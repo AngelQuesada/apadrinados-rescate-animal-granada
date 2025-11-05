@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import DogsGrid from './DogsGrid';
 import { useDogsContext } from '#hooks/context/useDogsContext';
@@ -55,14 +55,18 @@ describe('DogsGrid', () => {
 
     // Hacemos clic en el título de la sección
     const unsponsoredTitle = screen.getByText('Sin apadrinar');
-    await user.click(unsponsoredTitle);
+    await act(async () => {
+      await user.click(unsponsoredTitle);
+    });
 
     // Ahora Bella debería ser visible
     expect(screen.getByText('Bella')).toBeInTheDocument();
 
     // Hacemos clic de nuevo para plegar
     // Re-query the element to avoid using a stale reference after re-render
-    await user.click(screen.getByText('Sin apadrinar'));
+    await act(async () => {
+      await user.click(screen.getByText('Sin apadrinar'));
+    });
 
     // Bella ya no es visible
     expect(screen.queryByText('Bella')).not.toBeInTheDocument();
@@ -77,14 +81,18 @@ describe('DogsGrid', () => {
 
     // Hacemos clic en el título de la sección
     const unavailableTitle = screen.getByText('No disponibles');
-    await user.click(unavailableTitle);
+    await act(async () => {
+      await user.click(unavailableTitle);
+    });
 
     // Ahora Charlie debería ser visible
     expect(screen.getByText('Charlie')).toBeInTheDocument();
 
     // Hacemos clic de nuevo para plegar
     // Re-query the element to avoid using a stale reference after re-render
-    await user.click(screen.getByText('No disponibles'));
+    await act(async () => {
+      await user.click(screen.getByText('No disponibles'));
+    });
 
     // Charlie ya no es visible
     expect(screen.queryByText('Charlie')).not.toBeInTheDocument();
