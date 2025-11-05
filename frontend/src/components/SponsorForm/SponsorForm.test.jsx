@@ -1,5 +1,5 @@
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SponsorForm from './SponsorForm';
 import useSponsorForm from '#hooks/components/useSponsorForm';
@@ -77,7 +77,9 @@ describe('SponsorForm Component', () => {
     const user = userEvent.setup();
     render(<SponsorForm />);
     const nameInput = screen.getByLabelText(/Nombre/i);
-    await user.type(nameInput, 'John Doe');
+    await act(async () => {
+      await user.type(nameInput, 'John Doe');
+    });
 
     // Check if the mock function was called with the updated state
     // Note: This tests the onChange handler logic
@@ -88,7 +90,9 @@ describe('SponsorForm Component', () => {
     const user = userEvent.setup();
     render(<SponsorForm />);
     const submitButton = screen.getByRole('button', { name: /Añadir Sponsor/i });
-    await user.click(submitButton);
+    await act(async () => {
+      await user.click(submitButton);
+    });
 
     expect(mockUseSponsorForm.handleSubmit).toHaveBeenCalledTimes(1);
   });
@@ -97,7 +101,9 @@ describe('SponsorForm Component', () => {
     const user = userEvent.setup();
     render(<SponsorForm />);
     const cancelButton = screen.getByRole('button', { name: /Cancelar/i });
-    await user.click(cancelButton);
+    await act(async () => {
+      await user.click(cancelButton);
+    });
 
     expect(mockUseSponsorForm.handleClose).toHaveBeenCalledTimes(1);
   });

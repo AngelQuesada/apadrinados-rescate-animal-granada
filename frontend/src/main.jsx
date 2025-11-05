@@ -6,6 +6,7 @@ import { DogsProvider } from "#context/DogsContext.jsx";
 import { UIProvider } from "#context/UIContext.jsx";
 import { SnackbarProvider } from "#context/SnackbarContext.jsx";
 import { ThemeProvider } from "@mui/material";
+import { ClickToComponent } from "click-to-react-component";
 import theme from "./theme/theme.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <DogsProvider>
             <BrowserRouter>
               <App />
+              <ClickToComponent />
             </BrowserRouter>
           </DogsProvider>
         </UIProvider>

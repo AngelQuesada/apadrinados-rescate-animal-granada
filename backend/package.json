@@ -19,7 +19,7 @@
     "start:prod": "node server.js",
     "db:seed": "node ./db/seed.js",
     "db:seed:dev": "dotenv -e .env.development -- node ./db/seed.js",
-    "db:seed:test": "dotenv -e .env.testing -- node ./db/seed.js",
+    "db:seed:test": "NODE_ENV=testing dotenv -e .env.testing -- node ./db/seed.js",
     "db:migrate:dev": "dotenv -e .env.development -- knex migrate:latest --env development",
     "db:migrate:test": "dotenv -e .env.testing -- knex migrate:latest --env testing",
     "db:migrate:prod": "knex migrate:latest --env production",
@@ -38,7 +38,8 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "knex": "^3.1.0",
-    "mysql2": "^3.14.5"
+    "mysql2": "^3.14.5",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

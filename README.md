@@ -12,10 +12,11 @@ La aplicación está construida con un backend en Node.js/Express y un frontend 
 
 | Área | Tecnología | Descripción |
 | :--- | :--- | :--- |
-| **Frontend** | React, Vite | UI moderna y rápida con un sistema de componentes. |
+| **Frontend** | React 18, Vite | UI moderna y rápida con un sistema de componentes. |
 | | Material-UI | Componentes de UI para un diseño consistente y profesional. |
 | | Axios | Cliente HTTP para la comunicación con el backend. |
 | | React Context | Manejo de estado global para la UI y los datos de los perros. |
+| | Click To React Component | Librería para inspeccionar componentes en el navegador. |
 | **Backend** | Node.js, Express | API RESTful robusta y escalable. |
 | | Knex.js, SQLite | Constructor de consultas SQL y base de datos relacional. |
 | | PayPal API | Integración para procesar los pagos de apadrinamiento. |
@@ -97,6 +98,7 @@ Para poner en marcha la aplicación, necesitas ejecutar tanto el backend como el
     cd backend
     pnpm test
     ```
+    **Nota:** Los tests del backend pueden fallar debido a un problema con la base de datos de pruebas. Se está trabajando para solucionar este problema.
 
 -   **Frontend:**
     ```bash
