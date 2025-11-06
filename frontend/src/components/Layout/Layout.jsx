@@ -1,6 +1,5 @@
 import { Backdrop, Box } from "@mui/material";
 import Header from "#components/Header/Header";
-import Footer from "#components/Footer/Footer";
 import { useUIContext } from "#hooks/context/useUIContext";
 import Search from "#components/Search/Search";
 
@@ -30,7 +29,6 @@ const Layout = ({ children }) => {
         >
           {children}
         </Box>
-        <Footer />
       </Box>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1, backdropFilter: "blur(3px)", backgroundColor: "rgba(0, 0, 0, 0.2)" }}
