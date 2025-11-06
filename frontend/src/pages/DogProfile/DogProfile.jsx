@@ -39,6 +39,7 @@ const DogProfile = () => {
     openSponsorForm,
     loading,
     confirmDeleteOpen,
+    setConfirmDeleteOpen,
     handleClickDeleteSponsor,
     handleClickDeleteSponsorSelection,
   } = useDogProfile();
@@ -285,6 +286,7 @@ const DogProfile = () => {
         acceptButtonText="Eliminar"
         isOpen={confirmDeleteOpen}
         onAccept={handleDeleteSponsor}
+        onClose={() => setConfirmDeleteOpen(false)}
       />
     </Box>
   );
