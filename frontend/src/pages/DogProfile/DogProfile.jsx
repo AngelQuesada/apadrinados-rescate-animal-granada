@@ -38,11 +38,13 @@ const DogProfile = () => {
     handleDeleteSponsor,
     openSponsorForm,
     loading,
+    isMobile,
     confirmDeleteOpen,
     setConfirmDeleteOpen,
     handleClickDeleteSponsor,
     handleClickDeleteSponsorSelection,
   } = useDogProfile();
+  
 
   // TODO: Tenemos nuestro propio componente de carga
   if (loadingDogContext) {
@@ -62,7 +64,10 @@ const DogProfile = () => {
   }
 
   return (
-    <Box sx={{ p: 3, pb: 1 }}>
+    <Box sx={{ p: {
+      xs: 0,
+      md: 3
+    } ,pt: {xs: 2}, pb: 1 }}>
       <Paper sx={{ p: 3, mb: 3, display: "flex", alignItems: "center" }}>
         <Badge
           overlap="circular"
@@ -126,7 +131,7 @@ const DogProfile = () => {
               >
                 Origen
               </TableCell>
-              <TableCell sx={{ color: "white" }}>Acciones</TableCell>
+              <TableCell sx={{ color: "white" }}>{isMobile ? "" : "Acciones"}</TableCell>
             </TableRow>
           </TableHead>
 

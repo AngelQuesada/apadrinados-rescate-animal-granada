@@ -22,7 +22,7 @@ const useDogProfile = () => {
 
   const { showSnackbar } = useSnackbar();
 
-  const { openSponsorForm } = useUIContext();
+  const { openSponsorForm, isMobile } = useUIContext();
 
   const { error, del } = useAxios();
 
@@ -124,6 +124,7 @@ const useDogProfile = () => {
     dogSponsors,
     allSponsors,
     modified,
+    isMobile,
     showSnackbar,
     openSponsorForm,
     confirmDeleteOpen,
