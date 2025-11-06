@@ -110,13 +110,14 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
           <Divider variant="middle" />
           <CardActions sx={{ justifyContent: "center" }}>
             <Tooltip title="Ver lista">
-              <IconButton onClick={handleClickProfile} sx={buttonStyles}>
+              <IconButton data-testid="view-profile-button" onClick={handleClickProfile} sx={buttonStyles}>
                 <Pets />
               </IconButton>
             </Tooltip>
             <Tooltip title="Copiar todos los emails">
               <Box component="span">
                 <IconButton
+                  data-testid="copy-emails-button"
                   sx={buttonStyles}
                   onClick={handleCopyEmails}
                   disabled={sponsorCount === 0}
