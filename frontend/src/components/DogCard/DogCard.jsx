@@ -51,6 +51,7 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
 
   return (
     <Card
+      data-testid="dog-card"
       className="dog-card"
       sx={{
         opacity: isPublished ? 1 : 0.6,

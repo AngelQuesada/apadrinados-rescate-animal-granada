@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test": "dotenv -e .env.development -- jest --no-cache",
     "coverage": "jest --coverage",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "e2e": "playwright test"
   },
   "packageManager": "pnpm@10.16.0",
   "imports": {
@@ -50,7 +51,8 @@
       "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
     },
     "testPathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/tests/e2e/"
     ]
   },
   "devDependencies": {
@@ -58,6 +60,7 @@
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
     "@eslint/js": "^9.36.0",
+    "@playwright/test": "^1.56.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.6.1",
