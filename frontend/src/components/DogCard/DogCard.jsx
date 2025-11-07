@@ -13,6 +13,7 @@ import { ContentCopy, Pets } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useUIContext } from "#hooks/context/useUIContext";
 import { useSnackbar } from "#hooks/context/useSnackbar";
+import { copyToClipboard } from "../../utils/helpers";
 
 const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
   const { showSnackbar } = useSnackbar();
@@ -37,10 +38,10 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
     setImagePopupOpen(true);
   };
 
-  const handleCopyEmails = () => {
+  const handleCopyEmails = async () => {
     if (sponsors && sponsors.length > 0) {
       const emails = sponsors.map((sponsor) => sponsor.email).join(", ");
-      navigator.clipboard.writeText(emails);
+      await copyToClipboard(emails);
       showSnackbar("Emails copiados al portapapeles", "success");
     }
   };

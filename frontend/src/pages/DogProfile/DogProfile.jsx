@@ -15,13 +15,20 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Edit, Delete, Add, Group, ContentCopy } from "@mui/icons-material";
+import { Edit, Delete, Add, Group, ContentCopy, ArrowBack } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "#hooks/components/useDogProfile";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
+import { useNavigate } from 'react-router-dom';
 
 const DogProfile = () => {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   const {
     profileDog,
     name,
@@ -38,10 +45,13 @@ const DogProfile = () => {
     handleDeleteSponsor,
     openSponsorForm,
     loading,
+    isMobile,
     confirmDeleteOpen,
+    setConfirmDeleteOpen,
     handleClickDeleteSponsor,
     handleClickDeleteSponsorSelection,
   } = useDogProfile();
+  
 
   // TODO: Tenemos nuestro propio componente de carga
   if (loadingDogContext) {
@@ -61,7 +71,20 @@ const DogProfile = () => {
   }
 
   return (
-    <Box sx={{ p: 3, pb: 1 }}>
+    <Box sx={{ p: {
+      xs: 0,
+      md: 3
+    } ,pt: {xs: 2}, pb: 1 }}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Tooltip title="Volver">
+          <IconButton onClick={handleGoBack}>
+            <ArrowBack />
+          </IconButton>
+        </Tooltip>
+        <Typography variant="h3" sx={{ ml: 1 }}>
+          {name}
+        </Typography>
+      </Box>
       <Paper sx={{ p: 3, mb: 3, display: "flex", alignItems: "center" }}>
         <Badge
           overlap="circular"
@@ -90,7 +113,6 @@ const DogProfile = () => {
           <Avatar src={imageUrl} alt={name} sx={{ width: 120, height: 120 }} />
         </Badge>
         <Box sx={{ ml: 3 }}>
-          <Typography variant="h3">{name}</Typography>
           <Typography variant="caption">
             Modificado: {new Date(modified).toLocaleDateString()}
           </Typography>
@@ -117,15 +139,7 @@ const DogProfile = () => {
               >
                 Fecha de creación
               </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  display: { xs: "none", md: "table-cell" },
-                }}
-              >
-                Origen
-              </TableCell>
-              <TableCell sx={{ color: "white" }}>Acciones</TableCell>
+              <TableCell sx={{ color: "white" }}>{isMobile ? "" : "Acciones"}</TableCell>
             </TableRow>
           </TableHead>
 
@@ -163,36 +177,33 @@ const DogProfile = () => {
                   >
                     {/* Checkbox */}
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        disabled={isPaypalSponsor}
-                        checked={isSelected}
-                        onChange={() =>
-                          handleSelectSponsor(sponsor.dog_sponsor_id)
-                        }
-                      />
+                      {isPaypalSponsor ? (
+                        <Tooltip title="Padrino de PayPal">
+                          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <FontAwesomeIcon
+                              icon={faPaypal}
+                              style={{ color: "#333333" }}
+                            />
+                          </Box>
+                        </Tooltip>
+                      ) : (
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() =>
+                            handleSelectSponsor(sponsor.dog_sponsor_id)
+                          }
+                        />
+                      )}
                     </TableCell>
                     {/* Nombre */}
-                    <TableCell>{sponsor.name}</TableCell>
+                    <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.name}</TableCell>
                     {/* Email */}
-                    <TableCell>{sponsor.email}</TableCell>
+                    <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.email}</TableCell>
                     {/* Fecha de Creación */}
                     <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                      sx={{ display: { xs: "none", md: "table-cell" }, color: isPaypalSponsor && "muted.main" }}
                     >
                       {new Date(sponsor.created_at).toLocaleDateString()}
-                    </TableCell>
-                    {/* Origen */}
-                    <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
-                    >
-                      {isPaypalSponsor && (
-                        <Tooltip title="PayPal">
-                          <FontAwesomeIcon
-                            icon={faPaypal}
-                            style={{ color: "#333333" }}
-                          />
-                        </Tooltip>
-                      )}
                     </TableCell>
                     {/* Acciones */}
                     <TableCell>
@@ -285,6 +296,7 @@ const DogProfile = () => {
         acceptButtonText="Eliminar"
         isOpen={confirmDeleteOpen}
         onAccept={handleDeleteSponsor}
+        onClose={() => setConfirmDeleteOpen(false)}
       />
     </Box>
   );

@@ -106,6 +106,7 @@ const useSponsorForm = () => {
                       }
                     }
                     ),
+                    modified: response.newModifiedDate
                   };
                 } else {
                   const { newSponsor } = response;

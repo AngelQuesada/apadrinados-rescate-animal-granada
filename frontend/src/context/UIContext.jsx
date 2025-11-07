@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { UIContext } from "#context/UI-context-definition";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 export const UIProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
@@ -10,6 +11,8 @@ export const UIProvider = ({ children }) => {
     isOpen: false,
     sponsor: null,
   });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   const openSponsorForm = (sponsor = null) => {
     setSponsorForm({ isOpen: true, sponsor });
@@ -33,6 +36,7 @@ export const UIProvider = ({ children }) => {
         sponsorForm,
         openSponsorForm,
         closeSponsorForm,
+        isMobile
       }}
     >
       {children}

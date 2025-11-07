@@ -135,13 +135,17 @@ const saveDogSponsor = async ({
     VALUES (?, ?, ?, ?, ?, NOW(), NOW(), NOW())
   `;
   try {
-    return await config.db.query(sqlQuery, [
+    const result = await config.db.query(sqlQuery, [
       dog_id,
       sponsor_id,
       end_date,
       source,
       is_active,
     ]);
+
+    await updateDogModifiedDate(dog_id);
+
+    return result;
   } catch (error) {
     console.error("Error al guardar la relación padrino-perro:", error);
     throw new AppError(
@@ -152,13 +156,33 @@ const saveDogSponsor = async ({
 };
 
 const updateSponsor = async ({ id, name, email }) => {
-  const sqlQuery = `
-    UPDATE wp_custom_sponsors
-    SET name = ?, email = ?, updated_at = NOW()
-    WHERE id = ?
-  `;
   try {
-    return await config.db.query(sqlQuery, [name, email, id]);
+    const sqlQuery = `
+      UPDATE wp_custom_sponsors
+      SET name = ?, email = ?, updated_at = NOW()
+      WHERE id = ?
+    `;
+    await config.db.query(sqlQuery, [name, email, id]);
+
+    const getDogIdsQuery = `
+      SELECT DISTINCT dog_id FROM wp_custom_dog_sponsors WHERE sponsor_id = ?
+    `;
+    const [rows] = await config.db.query(getDogIdsQuery, [id]);
+    const dogIds = rows.map((row) => row.dog_id);
+
+    await Promise.all(dogIds.map((dogId) => updateDogModifiedDate(dogId)));
+
+    if (dogIds.length > 0) {
+      const dogId = dogIds[0];
+      const getModifiedDateQuery = `SELECT post_modified FROM wp_posts WHERE ID = ?`;
+      const [modifiedDateRows] = await config.db.query(getModifiedDateQuery, [
+        dogId,
+      ]);
+      const newModifiedDate = modifiedDateRows[0].post_modified;
+      return { newModifiedDate };
+    }
+
+    return { newModifiedDate: null };
   } catch (error) {
     console.error("Error al actualizar el padrino:", error);
     throw new AppError(
@@ -169,11 +193,31 @@ const updateSponsor = async ({ id, name, email }) => {
 };
 
 const deleteDogSponsors = async ({ dogSponsorIds }) => {
-  const sqlQuery = `
-    DELETE FROM wp_custom_dog_sponsors where id IN (?)
-  `;
   try {
-    return await config.db.query(sqlQuery, [dogSponsorIds]);
+    const getDogIdsQuery = `
+      SELECT DISTINCT dog_id FROM wp_custom_dog_sponsors WHERE id IN (?)
+    `;
+    const [rows] = await config.db.query(getDogIdsQuery, [dogSponsorIds]);
+    const dogIds = rows.map((row) => row.dog_id);
+
+    const sqlQuery = `
+      DELETE FROM wp_custom_dog_sponsors where id IN (?)
+    `;
+    await config.db.query(sqlQuery, [dogSponsorIds]);
+
+    await Promise.all(dogIds.map((dogId) => updateDogModifiedDate(dogId)));
+
+    if (dogIds.length > 0) {
+      const dogId = dogIds[0];
+      const getModifiedDateQuery = `SELECT post_modified FROM wp_posts WHERE ID = ?`;
+      const [modifiedDateRows] = await config.db.query(getModifiedDateQuery, [
+        dogId,
+      ]);
+      const newModifiedDate = modifiedDateRows[0].post_modified;
+      return { newModifiedDate };
+    }
+
+    return { newModifiedDate: null };
   } catch (error) {
     console.error("Error al borrar la relación padrino-perro:", error);
     throw new AppError(
@@ -204,6 +248,20 @@ const getAllSponsors = async () => {
       "Error en la capa de servicio al obtener todos los sponsors.",
       500
     );
+  }
+};
+
+const updateDogModifiedDate = async (dogId) => {
+  const sqlQuery = `
+    UPDATE wp_posts
+    SET post_modified = NOW(), post_modified_gmt = UTC_TIMESTAMP()
+    WHERE ID = ?
+  `;
+  try {
+    await config.db.query(sqlQuery, [dogId]);
+  } catch (error) {
+    console.error(`Error al actualizar la fecha de modificación para el perro ${dogId}:`, error);
+    // We don't throw an error here because it's not critical for the main operation
   }
 };
 
