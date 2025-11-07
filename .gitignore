@@ -5,3 +5,13 @@ node_modules
 .gemini/settings.json
 backend/.env.development
 backend/.env.testing
+frontend/playwright-report/index.html
+frontend/playwright-report/data/07c8e2805af1daa0b8ddf6473d9a76e08702e80c.md
+frontend/playwright-report/data/7d2831bbc322ca99332c7fa2696c95bc3edff479.md
+frontend/playwright-report/data/c6bc0df76aa75629992a939ce14f22297df431fa.md
+frontend/test-results/.last-run.json
+frontend/test-results/dog-sponsorship-Dog-Sponso-080b5-d-remove-2-or-more-sponsors-chromium/error-context.md
+frontend/test-results/dog-sponsorship-Dog-Sponso-165c0-m-one-dog-on-the-front-page-chromium/error-context.md
+frontend/test-results/dog-sponsorship-Dog-Sponso-1ba46-all-emails-from-dog-profile-chromium/error-context.md
+frontend/test-results/dog-sponsorship-Dog-Sponso-5f38f-nar-and-No-disponibles-tabs-chromium/error-context.md
+frontend/test-results/dog-sponsorship-Dog-Sponso-9398a-profile-and-manage-sponsors-chromium/error-context.md
