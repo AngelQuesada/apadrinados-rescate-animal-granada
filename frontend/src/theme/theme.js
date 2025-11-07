@@ -26,6 +26,9 @@ const theme = createTheme({
       primary: "#333333",
       secondary: "#555555",
     },
+    muted: {
+      main: "#afafaf",
+    }
   },
 });
 

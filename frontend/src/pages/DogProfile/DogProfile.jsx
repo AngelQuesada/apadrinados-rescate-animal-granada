@@ -178,12 +178,12 @@ const DogProfile = () => {
                       />
                     </TableCell>
                     {/* Nombre */}
-                    <TableCell>{sponsor.name}</TableCell>
+                    <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.name}</TableCell>
                     {/* Email */}
-                    <TableCell>{sponsor.email}</TableCell>
+                    <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.email}</TableCell>
                     {/* Fecha de Creación */}
                     <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
+                      sx={{ display: { xs: "none", md: "table-cell" }, color: isPaypalSponsor && "muted.main" }}
                     >
                       {new Date(sponsor.created_at).toLocaleDateString()}
                     </TableCell>
