@@ -114,10 +114,11 @@ const updateSponsor = async (req, res, next) => {
   try {
     const { id, name, email } = req.body;
 
-    await wordpressService.updateSponsor({ id, name, email });
+    const { newModifiedDate } = await wordpressService.updateSponsor({ id, name, email });
     res.status(200).json({
       ok: true,
       message: "Padrino actualizado con éxito.",
+      newModifiedDate
     });
   } catch (error) {
     next(error);
@@ -129,10 +130,11 @@ const deleteDogSponsors = async (req, res, next) => {
     const { ids } = req.params;
     const dogSponsorIds = ids.split(",");
 
-    await wordpressService.deleteDogSponsors({ dogSponsorIds });
+    const { newModifiedDate } = await wordpressService.deleteDogSponsors({ dogSponsorIds });
     res.status(200).json({
       ok: true,
       message: "Relación(es) padrino - perro eliminada(s) con éxito.",
+      newModifiedDate
     });
   } catch (error) {
     next(error);

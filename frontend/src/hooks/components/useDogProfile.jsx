@@ -102,6 +102,7 @@ const useDogProfile = () => {
               sponsors: dog.sponsors.filter(
                 (sponsor) => !sponsorsToDelete.includes(sponsor.dog_sponsor_id)
               ),
+              modified: response.newModifiedDate
             };
           }
           return dog;
