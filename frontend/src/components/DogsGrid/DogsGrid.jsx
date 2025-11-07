@@ -50,7 +50,7 @@ const DogsGrid = () => {
         <>
           <Title>Apadrinados</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={4}>
+          <Grid container spacing={{xs:1,sm:2,md:4}}>
             {dogsWithSponsors.map(renderDog)}
           </Grid>
         </>

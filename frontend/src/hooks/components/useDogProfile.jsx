@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSnackbar } from "#hooks/context/useSnackbar";
 import { useUIContext } from "#hooks/context/useUIContext";
 import useAxios from "#hooks/useAxios";
+import { copyToClipboard } from "../../utils/helpers";
 
 const useDogProfile = () => {
   const [selectedSponsors, setSelectedSponsors] = useState([]);
@@ -72,10 +73,10 @@ const useDogProfile = () => {
     setConfirmDeleteOpen(true);
   };
 
-  const handleCopySponsorEmails = () => {
+  const handleCopySponsorEmails = async () => {
     if (dogSponsors && dogSponsors.length > 0) {
       const emails = dogSponsors.map((sponsor) => sponsor.email).join(", ");
-      navigator.clipboard.writeText(emails);
+      await copyToClipboard(emails);
       showSnackbar("Emails copiados al portapapeles", "success");
     }
   };
