@@ -15,13 +15,20 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Edit, Delete, Add, Group, ContentCopy } from "@mui/icons-material";
+import { Edit, Delete, Add, Group, ContentCopy, ArrowBack } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "#hooks/components/useDogProfile";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
+import { useNavigate } from 'react-router-dom';
 
 const DogProfile = () => {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   const {
     profileDog,
     name,
@@ -68,6 +75,16 @@ const DogProfile = () => {
       xs: 0,
       md: 3
     } ,pt: {xs: 2}, pb: 1 }}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Tooltip title="Volver">
+          <IconButton onClick={handleGoBack}>
+            <ArrowBack />
+          </IconButton>
+        </Tooltip>
+        <Typography variant="h3" sx={{ ml: 1 }}>
+          {name}
+        </Typography>
+      </Box>
       <Paper sx={{ p: 3, mb: 3, display: "flex", alignItems: "center" }}>
         <Badge
           overlap="circular"
@@ -96,7 +113,6 @@ const DogProfile = () => {
           <Avatar src={imageUrl} alt={name} sx={{ width: 120, height: 120 }} />
         </Badge>
         <Box sx={{ ml: 3 }}>
-          <Typography variant="h3">{name}</Typography>
           <Typography variant="caption">
             Modificado: {new Date(modified).toLocaleDateString()}
           </Typography>
