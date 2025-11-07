@@ -123,14 +123,6 @@ const DogProfile = () => {
               >
                 Fecha de creación
               </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  display: { xs: "none", md: "table-cell" },
-                }}
-              >
-                Origen
-              </TableCell>
               <TableCell sx={{ color: "white" }}>{isMobile ? "" : "Acciones"}</TableCell>
             </TableRow>
           </TableHead>
@@ -169,13 +161,23 @@ const DogProfile = () => {
                   >
                     {/* Checkbox */}
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        disabled={isPaypalSponsor}
-                        checked={isSelected}
-                        onChange={() =>
-                          handleSelectSponsor(sponsor.dog_sponsor_id)
-                        }
-                      />
+                      {isPaypalSponsor ? (
+                        <Tooltip title="Padrino de PayPal">
+                          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                            <FontAwesomeIcon
+                              icon={faPaypal}
+                              style={{ color: "#333333" }}
+                            />
+                          </Box>
+                        </Tooltip>
+                      ) : (
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() =>
+                            handleSelectSponsor(sponsor.dog_sponsor_id)
+                          }
+                        />
+                      )}
                     </TableCell>
                     {/* Nombre */}
                     <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.name}</TableCell>
@@ -186,19 +188,6 @@ const DogProfile = () => {
                       sx={{ display: { xs: "none", md: "table-cell" }, color: isPaypalSponsor && "muted.main" }}
                     >
                       {new Date(sponsor.created_at).toLocaleDateString()}
-                    </TableCell>
-                    {/* Origen */}
-                    <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" } }}
-                    >
-                      {isPaypalSponsor && (
-                        <Tooltip title="PayPal">
-                          <FontAwesomeIcon
-                            icon={faPaypal}
-                            style={{ color: "#333333" }}
-                          />
-                        </Tooltip>
-                      )}
                     </TableCell>
                     {/* Acciones */}
                     <TableCell>
