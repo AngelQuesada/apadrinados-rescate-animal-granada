@@ -66,7 +66,7 @@ export default function ConfirmDialog({
         </DialogContent>
         <DialogActions sx={{ padding: 2 }}>
           <Button onClick={handleClose}> {cancelButtonText} </Button>
-          <Button onClick={handleAccept} color="secondary" variant="contained">
+          <Button onClick={handleAccept} data-testid="confirm-dialog-accept-button" olor="secondary" variant="contained">
             {acceptButtonText}
           </Button>
         </DialogActions>

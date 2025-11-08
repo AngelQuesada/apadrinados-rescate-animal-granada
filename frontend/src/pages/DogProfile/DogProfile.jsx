@@ -210,6 +210,7 @@ const DogProfile = () => {
                       <Tooltip title="Editar">
                         <span>
                           <IconButton
+                            data-testid="edit-sponsor-button"
                             disabled={isPaypalSponsor}
                             onClick={() => openSponsorForm(sponsor)}
                           >
@@ -227,6 +228,7 @@ const DogProfile = () => {
                             onClick={() => {
                               handleClickDeleteSponsor(sponsor.dog_sponsor_id);
                             }}
+                            data-testid="delete-sponsor-button"
                             disabled={isPaypalSponsor}
                           >
                             <Delete />
@@ -263,7 +265,7 @@ const DogProfile = () => {
           }}
         >
           <Tooltip title="Añadir Padrino">
-            <IconButton onClick={handleOpenSponsorForm} color="primary">
+            <IconButton data-testid="add-sponsor-button" onClick={handleOpenSponsorForm} color="primary">
               <Add />
             </IconButton>
           </Tooltip>

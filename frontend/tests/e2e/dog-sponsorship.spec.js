@@ -9,16 +9,22 @@ test.describe('Dog Sponsorship', () => {
     // Check "Sin apadrinar" section
     const sinApadrinarTitle = page.getByText('Sin apadrinar');
     await sinApadrinarTitle.click();
-    await expect(page.locator('[data-testid="dog-card"]').first()).toBeVisible();
+    const sectionSinApadrinar = page.locator('.collapsible-section')
+                                .filter({ hasText: 'Sin apadrinar' });
+    const sinApadrinarDogsGrid = sectionSinApadrinar.locator('.collapsable-dog-grid');
+    await expect(sinApadrinarDogsGrid).toBeVisible();
     await sinApadrinarTitle.click();
-    await expect(page.locator('[data-testid="dog-card"]').first()).not.toBeVisible();
+    await expect(sinApadrinarDogsGrid).not.toBeVisible();
 
-    // Check "No disponibles" section
-    const noDisponiblesTitle = page.getByText('No disponibles');
+    // Check "Sin apadrinar" section
+    const noDisponiblesTitle = page.getByText('Sin apadrinar');
     await noDisponiblesTitle.click();
-    await expect(page.locator('[data-testid="dog-card"]').first()).toBeVisible();
+    const sectionNoDisponibles = page.locator('.collapsible-section')
+                                .filter({ hasText: 'Sin apadrinar' });
+    const noDisponiblesDogsGrid = sectionNoDisponibles.locator('.collapsable-dog-grid');
+    await expect(noDisponiblesDogsGrid).toBeVisible();
     await noDisponiblesTitle.click();
-    await expect(page.locator('[data-testid="dog-card"]').first()).not.toBeVisible();
+    await expect(noDisponiblesDogsGrid).not.toBeVisible();
   });
 
   test('should copy all emails from one dog on the front page', async ({ page }) => {
@@ -27,7 +33,7 @@ test.describe('Dog Sponsorship', () => {
     await copyButton.click();
     const snackbar = page.locator('.MuiSnackbar-root');
     await expect(snackbar).toBeVisible();
-    await expect(snackbar).toContainText('Emails de los padrinos copiados al portapapeles');
+    await expect(snackbar).toContainText('Emails copiados al portapapeles');
   });
 
   test('should go into a dog profile and manage sponsors', async ({ page }) => {
@@ -39,17 +45,17 @@ test.describe('Dog Sponsorship', () => {
     await expect(page).toHaveURL(/\/dog-profile\/\d+/);
 
     // Add a sponsor
-    const addSponsorButton = page.getByText('Añadir Padrino');
+    const addSponsorButton = page.getByTestId('add-sponsor-button');
     await addSponsorButton.click();
     const sponsorForm = page.locator('form');
     await sponsorForm.locator('input[name="name"]').fill('John Doe');
-    await sponsorForm.locator('input[name="email"]').fill('john.doe@example.com');
+    await sponsorForm.locator('input[name="email"]').fill('johntddada.doade@example.com');
     await sponsorForm.locator('button[type="submit"]').click();
     await expect(page.getByText('John Doe')).toBeVisible();
 
     // Edit the sponsor
     const sponsorRow = page.locator('tr:has-text("John Doe")');
-    const editButton = sponsorRow.locator('button[aria-label="edit"]');
+    const editButton = sponsorRow.locator('[data-testid="edit-sponsor-button"]');
     await editButton.click();
     const editSponsorForm = page.locator('form');
     await editSponsorForm.locator('input[name="name"]').fill('Jane Doe');
@@ -58,9 +64,9 @@ test.describe('Dog Sponsorship', () => {
 
     // Remove the sponsor
     const updatedSponsorRow = page.locator('tr:has-text("Jane Doe")');
-    const deleteButton = updatedSponsorRow.locator('button[aria-label="delete"]');
+    const deleteButton = updatedSponsorRow.locator('[data-testid="delete-sponsor-button"]');
     await deleteButton.click();
-    const confirmButton = page.getByText('Confirmar');
+    const confirmButton = page.getByTestId('confirm-dialog-accept-button');
     await confirmButton.click();
     await expect(page.getByText('Jane Doe')).not.toBeVisible();
   });

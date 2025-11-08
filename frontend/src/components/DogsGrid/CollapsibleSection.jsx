@@ -50,11 +50,11 @@ const CollapsibleSection = ({
   );
 
   return (
-    <Box>
+    <Box className="collapsible-section">
       <Title>{title}</Title>
       <Divider sx={{ mb: 4 }} />
       {isOpen && (
-        <Grid container spacing={4}>
+        <Grid className="collapsable-dog-grid" container spacing={4}>
           {dogs.map(renderDog)}
         </Grid>
       )}
