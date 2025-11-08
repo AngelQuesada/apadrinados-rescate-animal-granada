@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
+  globalSetup: './playwright.global-setup.js',
   testDir: './tests/e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -38,6 +39,6 @@ export default defineConfig({
     command: 'pnpm dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
-    timeout: 5 * 60 * 1000,
+    timeout: 10 * 60 * 1000,
   },
 });
