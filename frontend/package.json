@@ -8,10 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=development dotenv -e .env.development -- jest --no-cache",
-    "e2e": "cross-env NODE_ENV=testing playwright test",
+    "e2e": "playwright test",
     "coverage": "jest --coverage",
-    "preview": "vite preview",
-    "e2e": "playwright test"
+    "preview": "vite preview"
   },
   "packageManager": "pnpm@10.16.0",
   "imports": {
