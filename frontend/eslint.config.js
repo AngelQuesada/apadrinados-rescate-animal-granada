@@ -32,6 +32,15 @@ export default defineConfig([
       globals: {
         ...globals.jest,
         ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['playwright.config.js', 'playwright.global-setup.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
       },
     },
   },
