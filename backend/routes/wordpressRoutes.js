@@ -19,6 +19,10 @@ router.delete(
   "/delete-dog-sponsors/:ids",
   wordpressController.deleteDogSponsors
 );
+router.delete(
+  "/delete-sponsor-by-email/:email",
+  wordpressController.deleteSponsorByEmail
+);
 router.get(
   "/get-sponsors-by-dogs-ids",
   wordpressController.getSponsorsByDogsIds

@@ -251,14 +251,54 @@ const getAllSponsors = async () => {
   }
 };
 
-const updateDogModifiedDate = async (dogId) => {
+const deleteSponsorByEmail = async (email) => {
+  const connection = await config.db.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    const getSponsorIdQuery = "SELECT id FROM wp_custom_sponsors WHERE email = ?";
+    const [sponsorRows] = await connection.query(getSponsorIdQuery, [email]);
+
+    if (sponsorRows.length === 0) {
+      throw new AppError("No se encontró ningún patrocinador con ese correo electrónico.", 404);
+    }
+
+    const sponsorId = sponsorRows[0].id;
+
+    const getDogIdsQuery = "SELECT DISTINCT dog_id FROM wp_custom_dog_sponsors WHERE sponsor_id = ?";
+    const [dogRows] = await connection.query(getDogIdsQuery, [sponsorId]);
+    const dogIds = dogRows.map((row) => row.dog_id);
+
+    const deleteDogSponsorsQuery = "DELETE FROM wp_custom_dog_sponsors WHERE sponsor_id = ?";
+    await connection.query(deleteDogSponsorsQuery, [sponsorId]);
+
+    const deleteSponsorQuery = "DELETE FROM wp_custom_sponsors WHERE id = ?";
+    await connection.query(deleteSponsorQuery, [sponsorId]);
+
+    await Promise.all(dogIds.map((dogId) => updateDogModifiedDate(dogId, connection)));
+
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    console.error("Error al eliminar el patrocinador por correo electrónico:", error);
+    throw new AppError(
+      error.message || "Error en la capa de servicio al eliminar el patrocinador.",
+      error.statusCode || 500
+    );
+  } finally {
+    connection.release();
+  }
+};
+
+const updateDogModifiedDate = async (dogId, connection) => {
   const sqlQuery = `
     UPDATE wp_posts
     SET post_modified = NOW(), post_modified_gmt = UTC_TIMESTAMP()
     WHERE ID = ?
   `;
   try {
-    await config.db.query(sqlQuery, [dogId]);
+    const db = connection || config.db;
+    await db.query(sqlQuery, [dogId]);
   } catch (error) {
     console.error(`Error al actualizar la fecha de modificación para el perro ${dogId}:`, error);
     // We don't throw an error here because it's not critical for the main operation
@@ -273,5 +313,6 @@ export default {
   fetchSponsorsByDogsIds,
   deleteDogSponsors,
   getAllSponsors,
-  updateSponsor
+  updateSponsor,
+  deleteSponsorByEmail,
 };

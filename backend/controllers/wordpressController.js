@@ -211,6 +211,19 @@ const getAllSponsors = async (req, res, next) => {
   }
 };
 
+const deleteSponsorByEmail = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    await wordpressService.deleteSponsorByEmail(email);
+    res.status(200).json({
+      ok: true,
+      message: "Patrocinador eliminado con éxito.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getStructuredDogsData,
   saveSponsors,
@@ -221,4 +234,5 @@ export default {
   saveSponsor,
   deleteDogSponsors,
   updateSponsor,
+  deleteSponsorByEmail,
 };

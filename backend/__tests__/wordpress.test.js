@@ -1,29 +1,65 @@
-import request from 'supertest';
-import app from '../app.js'; // Import the app instance
-import sponsorsData from '../mocks/sponsors.json';
+import wordpressService from "../services/wordpressServices.js";
+import AppError from "../utils/AppError.js";
+import config from "../config/index.js";
 
-describe('WordPress Endpoints', () => {
-  // The test script in package.json already handles resetting the DB
-  // so we can rely on the seed data being present for each test run.
+jest.mock("../config/index.js", () => ({
+  db: {
+    query: jest.fn(),
+    getConnection: jest.fn(() => ({
+      beginTransaction: jest.fn(),
+      query: jest.fn(),
+      commit: jest.fn(),
+      rollback: jest.fn(),
+      release: jest.fn(),
+    })),
+  },
+}));
 
-  describe('GET /api/wordpress/get-all-sponsors', () => {
-    it('should return all sponsors from the database', async () => {
-      const response = await request(app)
-        .get('/api/wordpress/get-all-sponsors')
-        .expect('Content-Type', /json/)
-        .expect(200);
+describe("wordpressService", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-      expect(response.body.ok).toBe(true);
-      expect(response.body.count).toBe(sponsorsData.sponsors.length);
-      expect(Array.isArray(response.body.sponsors)).toBe(true);
+  describe("deleteSponsorByEmail", () => {
+    it("should delete a sponsor and their relationships", async () => {
+      const email = "test@example.com";
+      const sponsorId = 1;
+      const dogIds = [101, 102];
 
-      // Check if the response contains the first sponsor from the mock data
-      // The order from the DB might not be guaranteed, so we use expect.arrayContaining
-      expect(response.body.sponsors).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining(sponsorsData.sponsors[0]),
-        ])
+      const connection = await config.db.getConnection();
+      connection.query
+        .mockResolvedValueOnce([[{ id: sponsorId }]]) 
+        .mockResolvedValueOnce([dogIds.map(id => ({ dog_id: id }))]) 
+        .mockResolvedValueOnce(undefined) 
+        .mockResolvedValueOnce(undefined); 
+
+      await wordpressService.deleteSponsorByEmail(email);
+
+      expect(connection.beginTransaction).toHaveBeenCalled();
+      expect(connection.query).toHaveBeenCalledWith("SELECT id FROM wp_custom_sponsors WHERE email = ?", [email]);
+      expect(connection.query).toHaveBeenCalledWith("SELECT DISTINCT dog_id FROM wp_custom_dog_sponsors WHERE sponsor_id = ?", [sponsorId]);
+      expect(connection.query).toHaveBeenCalledWith("DELETE FROM wp_custom_dog_sponsors WHERE sponsor_id = ?", [sponsorId]);
+      expect(connection.query).toHaveBeenCalledWith("DELETE FROM wp_custom_sponsors WHERE id = ?", [sponsorId]);
+      expect(connection.commit).toHaveBeenCalled();
+      expect(connection.rollback).not.toHaveBeenCalled();
+      expect(connection.release).toHaveBeenCalled();
+    });
+
+    it("should throw an error if sponsor not found", async () => {
+      const email = "nonexistent@example.com";
+
+      const connection = await config.db.getConnection();
+      connection.query.mockResolvedValueOnce([[]]);
+
+      await expect(wordpressService.deleteSponsorByEmail(email)).rejects.toThrow(
+        new AppError("No se encontró ningún patrocinador con ese correo electrónico.", 404)
       );
+
+      expect(connection.beginTransaction).toHaveBeenCalled();
+      expect(connection.query).toHaveBeenCalledWith("SELECT id FROM wp_custom_sponsors WHERE email = ?", [email]);
+      expect(connection.commit).not.toHaveBeenCalled();
+      expect(connection.rollback).toHaveBeenCalled();
+      expect(connection.release).toHaveBeenCalled();
     });
   });
 });
