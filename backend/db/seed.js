@@ -1,73 +1,66 @@
-import { promises as fs } from "fs";
+import knex from "knex";
+import { readFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { getDbConnection } from "#db/db.js";
+import config from "../knexfile.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function seedDatabase() {
-  let connection;
-  console.log("🚀 Iniciando el script de seeding...");
+async function readMockData(fileName) {
+  const filePath = path.resolve(__dirname, "..", "mocks", fileName);
+  const data = await readFile(filePath, "utf8");
+  return JSON.parse(data);
+}
+
+export async function seedDatabase() {
+  const environment = process.env.NODE_ENV || "development";
+  console.log(
+    `🚀 Iniciando el script de seeding para el entorno: ${environment}...`
+  );
+  const db = knex(config[environment]);
 
   try {
-    connection = await getDbConnection();
-    console.log("✅ Conexión a la base de datos establecida.");
-    const sponsorsPath = path.resolve(__dirname, "../mocks/sponsors.json");
-    const dogSponsorsPath = path.resolve(
-      __dirname,
-      "../mocks/dog_sponsors.json"
-    );
+    console.log("✅ Conexión a la base de datos establecida con Knex.");
 
-    const sponsorsData = JSON.parse(await fs.readFile(sponsorsPath, "utf-8"));
-    const dogSponsorsData = JSON.parse(
-      await fs.readFile(dogSponsorsPath, "utf-8")
-    );
-    console.dir("sponsorsData" + sponsorsData);
-    console.dir("dogSponsorsData" + dogSponsorsData);
+    const sponsors = await readMockData("sponsors.json");
+    const dog_sponsors = await readMockData("dog_sponsors.json");
     console.log("✅ Datos mock leídos correctamente.");
 
-    console.log("⏳ Vaciando tablas existentes...");
-    await connection.query("SET FOREIGN_KEY_CHECKS = 0;");
-    await connection.query("TRUNCATE TABLE wp_custom_sponsors");
-    await connection.query("TRUNCATE TABLE wp_custom_dog_sponsors");
-    await connection.query("SET FOREIGN_KEY_CHECKS = 1;");
-    console.log("✅ Tablas vaciadas correctamente.");
-    console.log("⏳ Insertando datos mock...");
-    const sponsors = sponsorsData.sponsors.map((sponsor) => [
-      sponsor.id,
-      sponsor.name,
-      sponsor.email,
-      new Date(),
-      new Date(),
-    ]);
+    await db.transaction(async (trx) => {
+      await trx.raw("SET FOREIGN_KEY_CHECKS = 0;");
+      console.log("🔑 Foreign key checks deshabilitadas.");
 
-    await connection.query(
-      "INSERT INTO wp_custom_sponsors (id, name, email, created_at, updated_at) VALUES ?",
-      [sponsors]
-    );
-    console.log("✅ Datos de padrinos insertados correctamente.");
-    const dogSponsors = dogSponsorsData.dog_sponsors.map((dogSponsor) => [
-      dogSponsor.id,
-      dogSponsor.dog_id,
-      dogSponsor.sponsor_id,
-      dogSponsor.start_date,
-      dogSponsor.end_date,
-      // new Date(),
-      // new Date(),
-      dogSponsor.source,
-      dogSponsor.is_active,
-    ]);
-    await connection.query(
-      "INSERT INTO wp_custom_dog_sponsors (id, dog_id, sponsor_id, start_date, end_date, source, is_active) VALUES ?",
-      [dogSponsors]
-    );
-    console.log("✅ Datos relación padrino-perro insertados correctamente.");
-    console.log("✅ Script de seeding completado.");
+      await trx("wp_custom_dog_sponsors").truncate();
+      console.log("🗑️ Tabla wp_custom_dog_sponsors vaciada.");
+      await trx("wp_custom_sponsors").truncate();
+      console.log("🗑️ Tabla wp_custom_sponsors vaciada.");
+
+      await trx("wp_custom_sponsors").insert(sponsors.sponsors);
+      console.log(
+        `✅ Insertados ${sponsors.sponsors.length} registros en wp_custom_sponsors.`
+      );
+      await trx("wp_custom_dog_sponsors").insert(dog_sponsors.dog_sponsors);
+      console.log(
+        `✅ Insertados ${dog_sponsors.dog_sponsors.length} registros en wp_custom_dog_sponsors.`
+      );
+
+      await trx.raw("SET FOREIGN_KEY_CHECKS = 1;");
+      console.log("🔑 Foreign key checks rehabilitadas.");
+    });
+
+    console.log("✅ Script de seeding completado con éxito.");
   } catch (error) {
-    console.error("Error al insertar datos mock:", error);
+    console.error("❌ Error durante el script de seeding:", error);
     throw error;
+  } finally {
+    if (db) {
+      await db.destroy();
+      console.log("🔌 Conexión a la base de datos cerrada.");
+    }
   }
 }
 
-await seedDatabase();
+seedDatabase().catch(() => {
+  process.exit(1);
+});

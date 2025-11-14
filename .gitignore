@@ -7,3 +7,9 @@ backend/.env.development
 backend/.env.testing
 frontend/playwright-report
 frontend/test-results
+
+# Ignore reports directory contents
+reports/*
+
+# But not the template
+!reports/changes_251114_1406_commit_title.html

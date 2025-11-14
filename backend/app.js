@@ -14,6 +14,9 @@ app.use(cors());
 // Rutas
 app.use("/api/wordpress", wordpressRoutes);
 app.use("/api/paypal", paypalRoutes);
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 // Manejador de errores
 app.use(errorHandler);

@@ -39,6 +39,31 @@ Full Transparency: Always document and explain the decision-making process.
 
 Quality Above All: Code must be clean, efficient, and verified with tests. "Done" means "verified."
 
+Linting After Changes: After making any code modifications, you MUST run the project's linter on the affected files to check for syntax errors and style violations.
+
 Comments: Comment the code if you feel like it needs an explanation, always in spanish
 
 Real-Time Documentation: Continuously update project documentation (README.md, /docs), not as a final task.
+
+---
+**COMMIT AND REPORTING PROTOCOL**
+
+When the user signals that a task is complete and asks you to commit the changes, you MUST follow these steps IN ORDER:
+
+1.  **Analyze Staged Changes:** Review all staged changes (`git diff --staged`) to fully understand the modifications.
+2.  **Generate Commit Message:** Based on your analysis, generate a conventional commit message, including a title (e.g., `feat:`, `fix:`, `docs:`) and a detailed body explaining the what and why of the changes. **Both the title and the body MUST be in Spanish.**
+3.  **Propose for Approval:** Present the generated commit message (title and body) to the user for approval. DO NOT proceed without explicit confirmation.
+4.  **Generate Report File:** Once the commit message is approved, create the HTML report file inside the `reports/` directory.
+    *   The filename MUST follow this exact format: `changes_YYMMDD_HHMM_commit_title.html`, using the approved commit title (with spaces replaced by underscores).
+    *   The content of this report MUST be a detailed explanation of all staged changes, similar to the commit body.
+    *   The style of the report MUST match the template file at `reports/changes_251114_1406_commit_title.html`.
+5.  **Execute Commit:**
+    *   Stage all new and modified files (`git add .`).
+    *   Perform the commit using the approved message.
+---
+
+When you make changes in the code, not just mention what they do, I want you to explan why you did it, what do they do, and how do they do it.
+
+MUST REMEMBER ON EVERY TASK:
+- We are using Windows 11
+- We are usign vscode

@@ -22,4 +22,12 @@ export default defineConfig({
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: [ '**/node_modules/**', '**/dist/**', '**/build/**' ],
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: process.env.CI ? 'http://localhost:3002' : 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
+  },
 });

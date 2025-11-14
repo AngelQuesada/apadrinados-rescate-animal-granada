@@ -87,7 +87,6 @@ const saveSponsors = async (sponsors) => {
 
   try {
     await config.db.query(sqlQuery + placeholders, values);
-    console.log(`${sponsors.length} patrocinadores guardados exitosamente.`);
   } catch (error) {
     console.error("Error al guardar los patrocinadores:", error);
     throw new AppError(
@@ -253,6 +252,7 @@ const getAllSponsors = async () => {
 
 const deleteSponsorByEmail = async (email) => {
   const connection = await config.db.getConnection();
+  
   try {
     await connection.beginTransaction();
 
@@ -260,31 +260,34 @@ const deleteSponsorByEmail = async (email) => {
     const [sponsorRows] = await connection.query(getSponsorIdQuery, [email]);
 
     if (sponsorRows.length === 0) {
-      throw new AppError("No se encontró ningún patrocinador con ese correo electrónico.", 404);
+      // Si el sponsor no existe, finalizamos la transacción y salimos
+      await connection.commit();
+      return;
     }
 
     const sponsorId = sponsorRows[0].id;
 
+    // Obtener los dog_ids ANTES de borrar las relaciones para poder actualizar 'post_modified'
     const getDogIdsQuery = "SELECT DISTINCT dog_id FROM wp_custom_dog_sponsors WHERE sponsor_id = ?";
     const [dogRows] = await connection.query(getDogIdsQuery, [sponsorId]);
     const dogIds = dogRows.map((row) => row.dog_id);
 
+    // Eliminar todas las relaciones de apadrinamiento para este sponsor
     const deleteDogSponsorsQuery = "DELETE FROM wp_custom_dog_sponsors WHERE sponsor_id = ?";
     await connection.query(deleteDogSponsorsQuery, [sponsorId]);
 
+    // Eliminar el sponsor de la tabla principal
     const deleteSponsorQuery = "DELETE FROM wp_custom_sponsors WHERE id = ?";
     await connection.query(deleteSponsorQuery, [sponsorId]);
 
+    // Actualizar la fecha de modificación de los perros afectados
     await Promise.all(dogIds.map((dogId) => updateDogModifiedDate(dogId, connection)));
 
     await connection.commit();
   } catch (error) {
     await connection.rollback();
-    console.error("Error al eliminar el patrocinador por correo electrónico:", error);
-    throw new AppError(
-      error.message || "Error en la capa de servicio al eliminar el patrocinador.",
-      error.statusCode || 500
-    );
+    console.error("Error durante la transacción de eliminación del patrocinador:", error);
+    throw new AppError("Error en la capa de servicio al eliminar el patrocinador.", 500);
   } finally {
     connection.release();
   }
@@ -301,7 +304,6 @@ const updateDogModifiedDate = async (dogId, connection) => {
     await db.query(sqlQuery, [dogId]);
   } catch (error) {
     console.error(`Error al actualizar la fecha de modificación para el perro ${dogId}:`, error);
-    // We don't throw an error here because it's not critical for the main operation
   }
 };
 
