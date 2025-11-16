@@ -8,19 +8,25 @@ export const test = base.extend({
    * (nombre y email) y garantiza que será BORRADO de la BBDD
    * al final del test (pase o falle).
    */
-  testingSponsor: [async ({ request }, use) => {
+  testingSponsors: [async ({ request }, use) => {
     // SETUP  ---
-    const sponsorData = {
-      name: `Sponsor E2E ${Date.now()}`,
-      email: `sponsor-${Date.now()}@example.com`,
-      editedName: `Updated Sponsor ${Date.now()}`,
-    };
+    const dateNow = Date.now();
+    const sponsorsData = [{
+      name: `Sponsor E2E ${dateNow}`,
+      email: `sponsor-${dateNow}@example.com`,
+      editedName: `Updated Sponsor ${dateNow}`,
+    }, {
+      name: `Sponsor E2E ${dateNow+1}`,
+      email: `sponsor-${dateNow+1}@example.com`,
+      editedName: `Updated Sponsor ${dateNow+1}`,
+    }];
 
     // EJECUTAR EL TEST ---
-    await use(sponsorData);
+    await use(sponsorsData);
     
     // TEARDOWN ---
-    await apiUtils.deleteSponsorByEmail(request, sponsorData.email);
+    await apiUtils.deleteSponsorByEmail(request, sponsorsData[0].email);
+    await apiUtils.deleteSponsorByEmail(request, sponsorsData[1].email);
     
   }, { scope: 'test' }]
 });

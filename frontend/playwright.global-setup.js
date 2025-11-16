@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const FRONTEND_HOST = process.env.VITE_HOST || 'localhost';
+const FRONTEND_PORT = parseInt(process.env.VITE_PORT || '5173', 10);
 
 async function globalSetup() {
   // Las variables de entorno (incluida DB_NAME) ya han sido cargadas
@@ -28,6 +30,7 @@ async function globalSetup() {
   console.log(`  - Backend Host (usado):     ${host}`);
   console.log(`  - Backend Port (real):      ${realPort !== 'No detectado (el servidor backend aún no ha arrancado).' ? realPort : '(aún no asignado)'}`);
   console.log(`  - Playwright API URL (usada): http://${host}:${realPort}`);
+  console.log(`  - Frontend URL (usada):     http://${FRONTEND_HOST}:${FRONTEND_PORT}`);
   console.log('----------------------------------------------------------------');
 
   console.log('🔄  Reseteando la base de datos de pruebas...');

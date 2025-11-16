@@ -5,7 +5,7 @@ import { useSnackbar } from "#hooks/context/useSnackbar";
 import useAxios from "#hooks/useAxios";
 
 const useSponsorForm = () => {
-  const { profileDog, allSponsors, setAllDogs, allDogs } = useDogsContext();
+  const { profileDog, allSponsors, setAllDogs } = useDogsContext();
   const { sponsorForm, closeSponsorForm } = useUIContext();
   const { error, loading: loadingAxios, post, put } = useAxios();
   const { showSnackbar } = useSnackbar();
@@ -88,8 +88,8 @@ const useSponsorForm = () => {
           : await submitSponsorAndDogSponsor(name, email);
 
         if (response.ok) {
-          setAllDogs(
-            allDogs.map((dog) => {
+          setAllDogs((prevAllDogs) =>
+            prevAllDogs.map((dog) => {
               if (dog.id === profileDog.id) {
                 if (isEditMode) {
                   return {
@@ -104,16 +104,26 @@ const useSponsorForm = () => {
                       } else {
                         return sponsor;
                       }
-                    }
-                    ),
-                    modified: response.newModifiedDate
+                    }),
+                    modified: response.newModifiedDate,
                   };
                 } else {
                   const { newSponsor } = response;
+                  const sponsorExists = dog.sponsors.some(
+                    (s) => s.dog_sponsor_id === newSponsor.dog_sponsor_id
+                  );
+
+                  const newSponsors = sponsorExists
+                    ? dog.sponsors.map((s) =>
+                        s.dog_sponsor_id === newSponsor.dog_sponsor_id
+                          ? newSponsor
+                          : s
+                      )
+                    : [...dog.sponsors, newSponsor];
 
                   return {
                     ...dog,
-                    sponsors: [...dog.sponsors, newSponsor],
+                    sponsors: newSponsors,
                   };
                 }
               }

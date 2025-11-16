@@ -59,12 +59,12 @@ test.describe('Dog Sponsorship', () => {
     await expect(snackbar).toContainText('Emails copiados al portapapeles');
   });
 
-  test('should navigate to dog profile and manage sponsors', async ({ page, testingSponsor }) => {
+  test('should navigate to dog profile and manage sponsors', async ({ page, testingSponsors }) => {
     const { 
       name:sponsorName, 
       email:sponsorEmail, 
       editedName:updatedSponsorName, 
-    } = testingSponsor
+    } = testingSponsors[0]
     
     // --- NAVEGACIÓN ---
     const dogCard = page.locator('[data-testid="dog-card"]').first();
@@ -93,54 +93,75 @@ test.describe('Dog Sponsorship', () => {
     await expect(page.getByText(updatedSponsorName)).not.toBeVisible();
   });
 
-  // test('should remove 2 or more sponsors', async ({ page }) => {
-  //   const dogCard = page.locator('[data-testid="dog-card"]').first();
-  //   await dogCard.locator('[data-testid="view-profile-button"]').click();
-  //   await page.waitForURL(/\/dog-profile\/\d+/);
+  test('should remove 2 or more sponsors', async ({ page, testingSponsors }) => {
+    const dogCard = page.locator('[data-testid="dog-card"]').first();
+    await dogCard.locator('[data-testid="view-profile-button"]').click();
+    await page.waitForURL(/\/dog-profile\/\d+/);
 
-  //   const sponsor1Name = `Sponsor 1 ${Date.now()}`;
-  //   const sponsor1Email = `sponsor1-${Date.now()}@example.com`;
-  //   const sponsor2Name = `Sponsor 2 ${Date.now()}`;
-  //   const sponsor2Email = `sponsor2-${Date.now()}@example.com`;
+    // Añadimos dos sponsors
+    const addSponsorButton = page.getByTestId('add-sponsor-button');
+    await addSponsorButton.click();
+    const sponsorForm = page.locator('form');
+    const sponsorTable = page.getByTestId('sponsor-table');
 
-  //   // Add two sponsors
-  //   const addSponsorButton = page.getByTestId('add-sponsor-button');
-  //   await addSponsorButton.click();
-  //   const sponsorForm = page.locator('form');
-  //   await sponsorForm.locator('input[name="name"]').fill(sponsor1Name);
-  //   await sponsorForm.locator('input[name="email"]').fill(sponsor1Email);
-  //   await sponsorForm.locator('button[type="submit"]').click();
+    await sponsorForm.locator('input[name="name"]').fill(testingSponsors[0].name);
+    await sponsorForm.locator('input[name="email"]').fill(testingSponsors[0].email);
+    await sponsorForm.locator('button[type="submit"]').click();
+    await expect(sponsorTable).toContainText(testingSponsors[0].name);
 
-  //   await addSponsorButton.click();
-  //   await sponsorForm.locator('input[name="name"]').fill(sponsor2Name);
-  //   await sponsorForm.locator('input[name="email"]').fill(sponsor2Email);
-  //   await sponsorForm.locator('button[type="submit"]').click();
+    await addSponsorButton.click();
+    await sponsorForm.locator('input[name="name"]').fill(testingSponsors[1].name);
+    await sponsorForm.locator('input[name="email"]').fill(testingSponsors[1].email);
+    await sponsorForm.locator('button[type="submit"]').click();
+    await expect(sponsorTable).toContainText(testingSponsors[1].name);
 
-  //   // Select and delete
-  //   const sponsor1Row = page.locator(`tr:has-text("${sponsor1Name}")`);
-  //   const sponsor2Row = page.locator(`tr:has-text("${sponsor2Name}")`);
-  //   await sponsor1Row.locator('input[type="checkbox"]').check();
-  //   await sponsor2Row.locator('input[type="checkbox"]').check();
+    // Los selecccionamos con sus checkboxes
+    const sponsor1Row = page.locator(`tr:has-text("${testingSponsors[0].name}")`);
+    const sponsor2Row = page.locator(`tr:has-text("${testingSponsors[1].name}")`);
+    await sponsor1Row.locator('input[type="checkbox"]').click();
+    await sponsor2Row.locator('input[type="checkbox"]').click();
 
-  //   const deleteSelectedButton = page.getByTitle('Eliminar seleccionados');
-  //   await deleteSelectedButton.click();
+    // Los borramos
+    const deleteSelectedButton = page.getByTestId('delete-selected-button');
+    await deleteSelectedButton.click();
 
-  //   await page.getByTestId('confirm-dialog-accept-button').click();
+    await page.getByTestId('confirm-dialog-accept-button').click();
 
-  //   await expect(page.getByText(sponsor1Name)).not.toBeVisible();
-  //   await expect(page.getByText(sponsor2Name)).not.toBeVisible();
-  // });
+    // Comprobamos que ya no están en la tabla
+    await expect(sponsorTable.getByText(testingSponsors[0].name)).not.toBeVisible();
+    await expect(sponsorTable.getByText(testingSponsors[1].name)).not.toBeVisible();
+  });
 
-  // test('should copy emails from the dog profile page', async ({ page }) => {
-  //   const dogCard = page.locator('[data-testid="dog-card"]').first();
-  //   await dogCard.locator('[data-testid="view-profile-button"]').click();
-  //   await page.waitForURL(/\/dog-profile\/\d+/);
+  test('should copy emails from the dog profile page', async ({ page }) => {
+    // Mock the clipboard API for headless mode
+    await page.evaluate(() => {
+      const mockClipboard = {
+        writeText: () => Promise.resolve(),
+      };
+      const mockPermissions = {
+        query: () => Promise.resolve({ state: 'granted' }),
+      };
+      Object.defineProperty(navigator, 'clipboard', {
+        value: mockClipboard,
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(navigator, 'permissions', {
+        value: mockPermissions,
+        writable: true,
+        configurable: true,
+      });
+    });
 
-  //   const copyButton = page.getByTitle('Copiar emails');
-  //   await copyButton.click();
+    const dogCard = page.locator('[data-testid="dog-card"]').first();
+    await dogCard.locator('[data-testid="view-profile-button"]').click();
+    await page.waitForURL(/\/dog-profile\/\d+/);
 
-  //   const snackbar = page.locator('.MuiSnackbar-root');
-  //   await expect(snackbar).toBeVisible();
-  //   await expect(snackbar).toContainText('Emails de los padrinos copiados al portapapeles');
-  // });
+    const copyButton = page.getByTestId('copy-emails-button');
+    await copyButton.click();
+
+    const snackbar = page.locator('.MuiSnackbar-root');
+    await expect(snackbar).toBeVisible();
+    await expect(snackbar).toContainText('Emails copiados al portapapeles');
+  });
 });

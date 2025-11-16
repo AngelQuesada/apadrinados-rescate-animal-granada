@@ -52,7 +52,6 @@ const DogProfile = () => {
     handleClickDeleteSponsorSelection,
   } = useDogProfile();
   
-
   // TODO: Tenemos nuestro propio componente de carga
   if (loadingDogContext) {
     return (
@@ -124,7 +123,7 @@ const DogProfile = () => {
       </Typography>
 
       <TableContainer component={Paper}>
-        <Table>
+        <Table data-testid="sponsor-table">
           {/* Cabecera Tabla */}
           <TableHead>
             <TableRow sx={{ backgroundColor: "primary.main" }}>
@@ -274,6 +273,7 @@ const DogProfile = () => {
               <IconButton
                 onClick={handleClickDeleteSponsorSelection}
                 disabled={selectedSponsors.length === 0}
+                data-testid="delete-selected-button"
               >
                 <Delete />
               </IconButton>
@@ -284,6 +284,7 @@ const DogProfile = () => {
               <IconButton
                 onClick={handleCopySponsorEmails}
                 disabled={!dogSponsors || dogSponsors.length === 0}
+                data-testid="copy-emails-button"
               >
                 <ContentCopy />
               </IconButton>
