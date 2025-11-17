@@ -98,7 +98,6 @@ Para poner en marcha la aplicación, necesitas ejecutar tanto el backend como el
     cd backend
     pnpm test
     ```
-    **Nota:** Los tests del backend pueden fallar debido a un problema con la base de datos de pruebas. Se está trabajando para solucionar este problema.
 
 -   **Frontend:**
     ```bash

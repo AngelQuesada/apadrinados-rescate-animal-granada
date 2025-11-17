@@ -1,0 +1,17 @@
+{
+  "name": "rag-maillist-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.16.0",
+  "scripts": {
+    "reinstall": "node scripts/reinstall.js",
+    "start": "start powershell -NoExit -Command \"pnpm start:backend\" & start powershell -NoExit -Command \"pnpm start:frontend\"",
+    "start:backend": "pnpm --filter backend start:dev",
+    "start:frontend": "pnpm --filter frontend dev",
+    "test": "pnpm --filter backend test && pnpm --filter frontend test && pnpm --filter frontend test:e2e"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "rimraf": "^6.1.0"
+  }
+}
