@@ -36,6 +36,23 @@ const useDogProfile = () => {
 
   const { name, imageUrl, sponsors: dogSponsors, modified } = dog || {};
 
+  const sortedSponsors = useMemo(() => {
+    if (!dogSponsors) return [];
+    return [...dogSponsors].sort((a, b) => {
+      const aIsPaypal = a.source === 1;
+      const bIsPaypal = b.source === 1;
+
+      // Mover los padrinos de PayPal al final
+      if (aIsPaypal && !bIsPaypal) return 1;
+      if (!aIsPaypal && bIsPaypal) return -1;
+
+      // Ordenar por fecha de creación (más reciente primero)
+      return (
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    });
+  }, [dogSponsors]);
+
   useEffect(() => {
     setProfileDog(dog);
   }, [dog, setProfileDog]);
@@ -57,6 +74,17 @@ const useDogProfile = () => {
         return [...prevSelected, sponsorId];
       }
     });
+  };
+
+  const handleSelectAllSponsors = (checked) => {
+    if (checked) {
+      const selectableSponsors = dogSponsors
+        .filter((s) => s.source !== 1)
+        .map((s) => s.dog_sponsor_id);
+      setSelectedSponsors(selectableSponsors);
+    } else {
+      setSelectedSponsors([]);
+    }
   };
 
   const handleOpenSponsorForm = () => {
@@ -102,7 +130,7 @@ const useDogProfile = () => {
               sponsors: dog.sponsors.filter(
                 (sponsor) => !sponsorsToDelete.includes(sponsor.dog_sponsor_id)
               ),
-              modified: response.newModifiedDate
+              modified: response.newModifiedDate,
             };
           }
           return dog;
@@ -132,6 +160,7 @@ const useDogProfile = () => {
     confirmDeleteOpen,
     setAllDogs,
     error,
+    sortedSponsors,
     setConfirmDeleteOpen,
     setSelectedSponsors,
     handleSelectSponsor,
@@ -140,6 +169,7 @@ const useDogProfile = () => {
     handleCopySponsorEmails,
     handleClickDeleteSponsor,
     handleDeleteSponsor,
+    handleSelectAllSponsors,
   };
 };
 

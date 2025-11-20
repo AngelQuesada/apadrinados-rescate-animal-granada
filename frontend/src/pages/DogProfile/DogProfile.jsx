@@ -15,12 +15,19 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Edit, Delete, Add, Group, ContentCopy, ArrowBack } from "@mui/icons-material";
+import {
+  Edit,
+  Delete,
+  Add,
+  Group,
+  ContentCopy,
+  ArrowBack,
+} from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import useDogProfile from "#hooks/components/useDogProfile";
 import ConfirmDialog from "../../components/ConfirmDialog/ConfirmDialog";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const DogProfile = () => {
   const navigate = useNavigate();
@@ -50,8 +57,14 @@ const DogProfile = () => {
     setConfirmDeleteOpen,
     handleClickDeleteSponsor,
     handleClickDeleteSponsorSelection,
+    sortedSponsors,
+    handleSelectAllSponsors,
   } = useDogProfile();
-  
+
+  const selectableSponsorsCount =
+    sortedSponsors?.filter((s) => s.source !== 1).length || 0;
+  const numSelected = selectedSponsors.length;
+
   // TODO: Tenemos nuestro propio componente de carga
   if (loadingDogContext) {
     return (
@@ -70,10 +83,16 @@ const DogProfile = () => {
   }
 
   return (
-    <Box sx={{ p: {
-      xs: 0,
-      md: 3
-    } ,pt: {xs: 2}, pb: 1 }}>
+    <Box
+      sx={{
+        p: {
+          xs: 0,
+          md: 3,
+        },
+        pt: { xs: 2 },
+        pb: 1,
+      }}
+    >
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
         <Tooltip title="Volver">
           <IconButton onClick={handleGoBack}>
@@ -127,7 +146,26 @@ const DogProfile = () => {
           {/* Cabecera Tabla */}
           <TableHead>
             <TableRow sx={{ backgroundColor: "primary.main" }}>
-              <TableCell padding="checkbox"></TableCell>
+              <TableCell padding="checkbox">
+                <Tooltip title="Seleccionar todos">
+                  <Checkbox
+                    color="default"
+                    indeterminate={
+                      numSelected > 0 && numSelected < selectableSponsorsCount
+                    }
+                    checked={
+                      selectableSponsorsCount > 0 &&
+                      numSelected === selectableSponsorsCount
+                    }
+                    onChange={(e) => handleSelectAllSponsors(e.target.checked)}
+                    sx={{
+                      color: "white",
+                      "&.Mui-checked": { color: "white" },
+                      "&.MuiCheckbox-indeterminate": { color: "white" },
+                    }}
+                  />
+                </Tooltip>
+              </TableCell>
               <TableCell sx={{ color: "white" }}>Nombre</TableCell>
               <TableCell sx={{ color: "white" }}>Email</TableCell>
               <TableCell
@@ -138,106 +176,111 @@ const DogProfile = () => {
               >
                 Fecha de creación
               </TableCell>
-              <TableCell sx={{ color: "white" }}>{isMobile ? "" : "Acciones"}</TableCell>
+              <TableCell sx={{ color: "white" }}>
+                {isMobile ? "" : "Acciones"}
+              </TableCell>
             </TableRow>
           </TableHead>
 
           {/* Body Tabla */}
           <TableBody>
-            {[...dogSponsors]
-              .sort((a, b) => {
-                const aIsPaypal = a.source === 1;
-                const bIsPaypal = b.source === 1;
+            {sortedSponsors.map((sponsor) => {
+              const isPaypalSponsor = sponsor.source === 1;
+              const isSelected = selectedSponsors.includes(
+                sponsor.dog_sponsor_id
+              );
 
-                // Mover los padrinos de PayPal al final
-                if (aIsPaypal && !bIsPaypal) return 1;
-                if (!aIsPaypal && bIsPaypal) return -1;
-
-                // Ordenar por fecha de creación (más reciente primero)
-                return (
-                  new Date(b.created_at).getTime() -
-                  new Date(a.created_at).getTime()
-                );
-              })
-              .map((sponsor) => {
-                const isPaypalSponsor = sponsor.source === 1;
-                const isSelected = selectedSponsors.includes(
-                  sponsor.dog_sponsor_id
-                );
-
-                return (
-                  <TableRow
-                    key={sponsor.dog_sponsor_id}
-                    sx={{
-                      "& .MuiTableCell-root": {
-                        fontSize: { xs: "0.75rem", md: "1rem" },
-                      },
-                    }}
-                  >
-                    {/* Checkbox */}
-                    <TableCell padding="checkbox">
-                      {isPaypalSponsor ? (
-                        <Tooltip title="Padrino de PayPal">
-                          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                            <FontAwesomeIcon
-                              icon={faPaypal}
-                              style={{ color: "#333333" }}
-                            />
-                          </Box>
-                        </Tooltip>
-                      ) : (
+              return (
+                <TableRow
+                  key={sponsor.dog_sponsor_id}
+                  sx={{
+                    "& .MuiTableCell-root": {
+                      fontSize: { xs: "0.75rem", md: "1rem" },
+                    },
+                  }}
+                >
+                  {/* Checkbox */}
+                  <TableCell padding="checkbox">
+                    {isPaypalSponsor ? (
+                      <Tooltip title="Padrino de PayPal">
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPaypal}
+                            style={{ color: "#333333" }}
+                          />
+                        </Box>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip
+                        title={isSelected ? "Deseleccionar" : "Seleccionar"}
+                      >
                         <Checkbox
                           checked={isSelected}
                           onChange={() =>
                             handleSelectSponsor(sponsor.dog_sponsor_id)
                           }
                         />
-                      )}
-                    </TableCell>
-                    {/* Nombre */}
-                    <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.name}</TableCell>
-                    {/* Email */}
-                    <TableCell sx={{ color: isPaypalSponsor && "muted.main"}}>{sponsor.email}</TableCell>
-                    {/* Fecha de Creación */}
-                    <TableCell
-                      sx={{ display: { xs: "none", md: "table-cell" }, color: isPaypalSponsor && "muted.main" }}
-                    >
-                      {new Date(sponsor.created_at).toLocaleDateString()}
-                    </TableCell>
-                    {/* Acciones */}
-                    <TableCell>
-                      <Tooltip title="Editar">
-                        <span>
-                          <IconButton
-                            data-testid="edit-sponsor-button"
-                            disabled={isPaypalSponsor}
-                            onClick={() => openSponsorForm(sponsor)}
-                          >
-                            <Edit />
-                          </IconButton>
-                        </span>
                       </Tooltip>
-                      <Tooltip title="Eliminar">
-                        <span>
-                          <IconButton
-                            loading={
-                              loading &&
-                              selectedSponsor === sponsor.dog_sponsor_id
-                            }
-                            onClick={() => {
-                              handleClickDeleteSponsor(sponsor.dog_sponsor_id);
-                            }}
-                            data-testid="delete-sponsor-button"
-                            disabled={isPaypalSponsor}
-                          >
-                            <Delete />
-                          </IconButton>
-                        </span>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                    )}
+                  </TableCell>
+                  {/* Nombre */}
+                  <TableCell sx={{ color: isPaypalSponsor && "muted.main" }}>
+                    {sponsor.name}
+                  </TableCell>
+                  {/* Email */}
+                  <TableCell sx={{ color: isPaypalSponsor && "muted.main" }}>
+                    {sponsor.email}
+                  </TableCell>
+                  {/* Fecha de Creación */}
+                  <TableCell
+                    sx={{
+                      display: { xs: "none", md: "table-cell" },
+                      color: isPaypalSponsor && "muted.main",
+                    }}
+                  >
+                    {new Date(sponsor.created_at).toLocaleDateString()}
+                  </TableCell>
+                  {/* Acciones */}
+                  <TableCell>
+                    <Tooltip title="Editar">
+                      <span>
+                        <IconButton
+                          data-testid="edit-sponsor-button"
+                          disabled={isPaypalSponsor}
+                          onClick={() => openSponsorForm(sponsor)}
+                        >
+                          <Edit />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                    <Tooltip title="Eliminar">
+                      <span>
+                        <IconButton
+                          loading={
+                            loading &&
+                            selectedSponsor === sponsor.dog_sponsor_id
+                          }
+                          onClick={() => {
+                            handleClickDeleteSponsor(sponsor.dog_sponsor_id);
+                          }}
+                          data-testid="delete-sponsor-button"
+                          disabled={isPaypalSponsor}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -264,7 +307,11 @@ const DogProfile = () => {
           }}
         >
           <Tooltip title="Añadir Padrino">
-            <IconButton data-testid="add-sponsor-button" onClick={handleOpenSponsorForm} color="primary">
+            <IconButton
+              data-testid="add-sponsor-button"
+              onClick={handleOpenSponsorForm}
+              color="primary"
+            >
               <Add />
             </IconButton>
           </Tooltip>
