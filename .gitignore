@@ -15,4 +15,7 @@ reports/*
 # But not the template
 !reports/changes_251114_1406_commit_title.html
 
+# Ignore agent directory contents
+.agent/*
+
 GEMINI.md
