@@ -8,6 +8,7 @@ backend/.env.testing
 frontend/playwright-report
 frontend/test-results
 backend/.port
+backend/logs/
 
 # Ignore reports directory contents
 reports/*
