@@ -1,26 +1,52 @@
+import { useMemo } from "react";
 import { Box, Divider, Grid, Typography } from "@mui/material";
 import { useDogsContext } from "#hooks/context/useDogsContext";
 import CollapsibleSection from "./CollapsibleSection";
 import DogCard from "#components/DogCard/DogCard";
 
+const Title = ({ children }) => (
+  <Typography
+    variant="h5"
+    component="h2"
+    sx={{
+      mt: 6,
+      mb: 1,
+      fontWeight: "bold",
+      color: "text.primary",
+      textAlign: "left",
+    }}
+  >
+    {children}
+  </Typography>
+);
+
 const DogsGrid = () => {
   const { allDogs } = useDogsContext();
 
-  const dogsWithSponsors = [];
-  const dogsWithoutSponsorsPublished = [];
-  const dogsNotPublished = [];
+  const { dogsWithSponsors, dogsWithoutSponsorsPublished, dogsNotPublished } =
+    useMemo(() => {
+      const withSponsors = [];
+      const withoutSponsors = [];
+      const notPublished = [];
 
-  if (allDogs) {
-    allDogs.forEach((dog) => {
-      if (dog.status !== "publish") {
-        dogsNotPublished.push(dog);
-      } else if (dog.sponsors && dog.sponsors.length > 0) {
-        dogsWithSponsors.push(dog);
-      } else {
-        dogsWithoutSponsorsPublished.push(dog);
+      if (allDogs) {
+        allDogs.forEach((dog) => {
+          if (dog.status !== "publish") {
+            notPublished.push(dog);
+          } else if (dog.sponsors && dog.sponsors.length > 0) {
+            withSponsors.push(dog);
+          } else {
+            withoutSponsors.push(dog);
+          }
+        });
       }
-    });
-  }
+
+      return {
+        dogsWithSponsors: withSponsors,
+        dogsWithoutSponsorsPublished: withoutSponsors,
+        dogsNotPublished: notPublished,
+      };
+    }, [allDogs]);
 
   const renderDog = (dog) => (
     <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }} key={dog.id}>
@@ -28,21 +54,15 @@ const DogsGrid = () => {
     </Grid>
   );
 
-  const Title = ({ children }) => (
-    <Typography
-      variant="h5"
-      component="h2"
-      sx={{
-        mt: 6,
-        mb: 1,
-        fontWeight: "bold",
-        color: "text.primary",
-        textAlign: "left",
-      }}
-    >
-      {children}
-    </Typography>
-  );
+  if (!allDogs || allDogs.length === 0) {
+    return (
+      <Box sx={{ mt: 4, textAlign: "center" }}>
+        <Typography variant="h6" color="text.secondary">
+          No se encontraron perros.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -50,7 +70,7 @@ const DogsGrid = () => {
         <>
           <Title>Apadrinados</Title>
           <Divider sx={{ mb: 4 }} />
-          <Grid container spacing={{xs:1,sm:2,md:4}}>
+          <Grid container spacing={{ xs: 1, sm: 2, md: 4 }}>
             {dogsWithSponsors.map(renderDog)}
           </Grid>
         </>

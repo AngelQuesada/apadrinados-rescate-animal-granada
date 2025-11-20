@@ -15,6 +15,16 @@ import { useUIContext } from "#hooks/context/useUIContext";
 import { useSnackbar } from "#hooks/context/useSnackbar";
 import { copyToClipboard } from "../../utils/helpers";
 
+const buttonStyles = {
+  color: "primary.main",
+  border: "1px solid transparent",
+  "&:hover": {
+    bgcolor: "primary.main",
+    color: "white",
+    borderColor: "primary.main",
+  },
+};
+
 const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -22,16 +32,6 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
 
   const sponsorCount = sponsors ? sponsors.length : 0;
   const isPublished = status === "publish";
-
-  const buttonStyles = {
-    color: "primary.main",
-    border: "1px solid transparent",
-    "&:hover": {
-      bgcolor: "primary.main",
-      color: "white",
-      borderColor: "primary.main",
-    },
-  };
 
   const openPopupImage = () => {
     setImageUrlForPopup(imageUrl);
@@ -86,17 +86,20 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
               },
             }}
           >
-            <Avatar
+            <IconButton
               onClick={openPopupImage}
-              src={imageUrl}
-              alt={name}
-              sx={{
-                width: 72,
-                height: 72,
-                cursor: "pointer",
-                border: "2px solid white",
-              }}
-            />
+              sx={{ p: 0, border: "2px solid white" }}
+              aria-label={`Ver imagen de ${name}`}
+            >
+              <Avatar
+                src={imageUrl}
+                alt={name}
+                sx={{
+                  width: 72,
+                  height: 72,
+                }}
+              />
+            </IconButton>
           </Badge>
         }
         title={name}
@@ -111,7 +114,11 @@ const DogCard = ({ name, imageUrl, sponsors, status, modified, id }) => {
           <Divider variant="middle" />
           <CardActions sx={{ justifyContent: "center" }}>
             <Tooltip title="Ver lista">
-              <IconButton data-testid="view-profile-button" onClick={handleClickProfile} sx={buttonStyles}>
+              <IconButton
+                data-testid="view-profile-button"
+                onClick={handleClickProfile}
+                sx={buttonStyles}
+              >
                 <Pets />
               </IconButton>
             </Tooltip>
